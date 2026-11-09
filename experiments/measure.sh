@@ -16,7 +16,7 @@ d(){ docker exec "$NAME" bash -c "$1" > "$OUT/$2" 2>&1; }
 d 'systemd-cgtop -b -n 1 --depth=3 -m --raw' cgtop-mem.txt
 d 'for u in $(systemctl list-units --type=service --state=running --no-legend --plain | awk "{print \$1}"); do printf "%s %s %s\n" $u $(systemctl show $u -p MemoryCurrent --value) $(systemctl show $u -p CPUUsageNSec --value); done | sort -k2 -nr' services.txt
 d 'ps -eo pid,rss,pcpu,cputime,args --sort=-rss | cut -c1-400 | head -40' ps.txt
-d 'tr "\0" " " < /proc/$(pgrep -f ace.jar)/cmdline' java-cmdline.txt
+d 'tr "\0" " " < /proc/$(pgrep -o -u unifi java)/cmdline' java-cmdline.txt
 d 'tail -5 /usr/lib/unifi/logs/gc.log; grep -c Pause /usr/lib/unifi/logs/gc.log' gc-tail.txt
 d 'journalctl --disk-usage; du -sh /run/log/journal; journalctl -o cat --since "-10min" | wc -c' journal.txt
 d 'journalctl -b --no-pager | grep -iE "error|fail|oom|killed|outofmemory" | grep -v "^$" | tail -80' journal-errors.txt

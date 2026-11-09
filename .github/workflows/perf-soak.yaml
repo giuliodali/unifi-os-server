@@ -1,0 +1,23 @@
+name: perf-soak
+on:
+  push:
+    branches: [perf-lab]
+    paths: ['experiments/soak.json', '.github/workflows/perf-soak.yaml']
+permissions:
+  contents: write
+jobs:
+  soak:
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [base, tuned]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -q -t uos-test .
+      - run: experiments/soak.sh uos uos-test "$(jq -c '.[] | select(.name=="${{ matrix.name }}") | .options' experiments/soak.json)" $PWD/out/${{ matrix.name }} 18000
+      - if: always()
+        run: experiments/publish.sh out/${{ matrix.name }} soak/${{ github.run_id }}/${{ matrix.name }}

@@ -1,0 +1,21 @@
+[
+ {
+  "name": "base",
+  "options": {
+   "UOS_TUNING": false
+  }
+ },
+ {
+  "name": "tuned",
+  "options": {
+   "UOS_TUNING": true,
+   "UOS_JVM_MAX_HEAP_MB": 768,
+   "UOS_JVM_EXTRA_OPTS": "-XX:G1PeriodicGCInterval=60000 -XX:TrimNativeHeapInterval=60000",
+   "UOS_DISABLE_UNUSED_MONGODB": true,
+   "UOS_RABBITMQ_SCHEDULERS": 1,
+   "UOS_MALLOC_ARENA_MAX": 2,
+   "UOS_JOURNAL_MAX_MB": 32,
+   "UOS_MASK_HOUSEKEEPING_TIMERS": true
+  }
+ }
+]
