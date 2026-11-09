@@ -52,17 +52,27 @@ _dropin() { # unit, content
     printf '%s\n' "$2" > "/etc/systemd/system/$1.d/$TUNING_TAG.conf"
 }
 
+LOG_FIFO=/root/.uos-log.fifo
+
+# Keep a reader on Docker's stdout after exec /sbin/init (systemd points its own
+# stdout at /dev/null). It holds both ends of the FIFO so it never sees EOF.
+_start_log_relay() {
+    [ -p "$LOG_FIFO" ] || { rm -f "$LOG_FIFO"; mkfifo -m 600 "$LOG_FIFO"; }
+    ( exec 3<>"$LOG_FIFO"; exec cat <&3 ) &
+}
+
 _setup_resource_report() {
     local every="${UOS_RESOURCE_REPORT_MIN:-0}"
     _is_pos_int "$every" || return 0
+    _start_log_relay
     cat > /etc/systemd/system/uos-resource-report.service <<UNIT
 [Unit]
 Description=Log UniFi OS Server resource usage
 [Service]
 Type=oneshot
-# systemd has no console in a container: write to PID 1's stdout, which is
-# what Docker (and the Home Assistant app log) collects
-ExecStart=/bin/sh -c '/root/uos-resource-report.sh | tee -a /proc/1/fd/1'
+# systemd has no console in a container: write to the relay FIFO that the
+# entrypoint keeps attached to Docker's stdout (= the Home Assistant app log)
+ExecStart=/bin/sh -c '/root/uos-resource-report.sh | tee -a $LOG_FIFO'
 StandardOutput=journal
 UNIT
     cat > /etc/systemd/system/uos-resource-report.timer <<UNIT

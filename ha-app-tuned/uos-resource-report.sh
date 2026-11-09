@@ -24,5 +24,5 @@ for s in $SERVICES; do
 done
 mv "$STATE.new" "$STATE"
 total=$(( $(cat /sys/fs/cgroup/memory.current 2>/dev/null || echo 0) / 1048576 ))
-heap=$(tail -1 /usr/lib/unifi/logs/gc.log 2>/dev/null | grep -oE '[0-9]+M->[0-9]+M\([0-9]+M\)' | tail -1)
+heap=$(tail -50 /usr/lib/unifi/logs/gc.log 2>/dev/null | grep -oE '[0-9]+M->[0-9]+M\([0-9]+M\)' | tail -1)
 echo "[resources] total=${total}M java_heap=${heap:-?}${line}"

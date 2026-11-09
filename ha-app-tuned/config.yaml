@@ -1,5 +1,5 @@
 name: UniFi OS Server (tuned test)
-version: "v1.8.0-tuned.2"
+version: "v1.8.0-tuned.3"
 slug: unifi_os_server_tuned
 description: UniFi OS Server with CPU/RAM tuning (test build, built locally)
 url: https://github.com/giuliodali/unifi-os-server
