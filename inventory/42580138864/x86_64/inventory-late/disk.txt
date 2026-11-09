@@ -1,0 +1,32 @@
+Archived and active journals take up 8.0M in the file system.
+4.0K	/var/log/private
+4.0K	/var/log/wtmp
+8.0K	/var/lib/dbus
+8.0K	/var/lib/sudo
+8.0K	/var/log/mongodb
+8.0K	/var/log/postgresql
+12K	/var/lib/snmp
+16K	/var/lib/polkit-1
+24K	/var/lib/ucf
+24K	/var/log/rabbitmq
+24K	/var/log/unifi_package-identity-update
+28K	/var/lib/pam
+36K	/var/lib/apt
+36K	/var/log/nginx
+232K	/var/lib/smartmontools
+240K	/var/lib/rabbitmq
+304K	/var/lib/systemd
+15M	/var/lib/dpkg
+301M	/var/lib/mongodb
+304M	/var/lib/unifi
+Filesystem      Size  Used Avail Use% Mounted on
+overlay         145G   62G   84G  43% /
+tmpfs            64M     0   64M   0% /dev
+shm              64M   28K   64M   1% /dev/shm
+/dev/root       145G   62G   84G  43% /data
+tmpfs           4.0K     0  4.0K   0% /proc/acpi
+tmpfs           7.9G   40K  7.9G   1% /tmp
+tmpfs           7.9G     0  7.9G   0% /var/lib/journal
+tmpfs            64M     0   64M   0% /var/opt/unifi/tmp
+tmpfs           3.2G  8.3M  3.2G   1% /run
+tmpfs           5.0M     0  5.0M   0% /run/lock

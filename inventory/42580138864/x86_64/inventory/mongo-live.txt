@@ -1,0 +1,49 @@
+bash: line 1: mongosh: command not found
+{
+	"argv" : [
+		"bin/mongod",
+		"--dbpath",
+		"/usr/lib/unifi/data/db",
+		"--port",
+		"27117",
+		"--bind_ip",
+		"127.0.0.1",
+		"--unixSocketPrefix",
+		"/usr/lib/unifi/run",
+		"--logRotate",
+		"reopen",
+		"--logappend",
+		"--logpath",
+		"/usr/lib/unifi/logs/mongod.log",
+		"--pidfilepath",
+		"/usr/lib/unifi/run/mongod.pid",
+		"--wiredTigerEngineConfigString=cache_size=256M"
+	],
+	"parsed" : {
+		"net" : {
+			"bindIp" : "127.0.0.1",
+			"port" : 27117,
+			"unixDomainSocket" : {
+				"pathPrefix" : "/usr/lib/unifi/run"
+			}
+		},
+		"processManagement" : {
+			"pidFilePath" : "/usr/lib/unifi/run/mongod.pid"
+		},
+		"storage" : {
+			"dbPath" : "/usr/lib/unifi/data/db",
+			"wiredTiger" : {
+				"engineConfig" : {
+					"configString" : "cache_size=256M"
+				}
+			}
+		},
+		"systemLog" : {
+			"destination" : "file",
+			"logAppend" : true,
+			"logRotate" : "reopen",
+			"path" : "/usr/lib/unifi/logs/mongod.log"
+		}
+	},
+	"ok" : 1
+}

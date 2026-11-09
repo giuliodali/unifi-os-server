@@ -1,0 +1,664 @@
+######## cron.service
+# /lib/systemd/system/cron.service
+[Unit]
+Description=Regular background program processing daemon
+Documentation=man:cron(8)
+After=remote-fs.target nss-user-lookup.target
+
+[Service]
+EnvironmentFile=-/etc/default/cron
+ExecStart=/usr/sbin/cron -f $EXTRA_OPTS
+IgnoreSIGPIPE=false
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+
+# /lib/systemd/system/cron.service.d/loglevel.conf
+[Service]
+LogLevelMax=warning
+Restart=on-failure
+ExecStart={ path=/usr/sbin/cron ; argv[]=/usr/sbin/cron -f $EXTRA_OPTS ; ignore_errors=no ; start_time=[Mon 2026-11-09 02:34:40 EST] ; stop_time=[n/a] ; pid=1286 ; code=(null) ; status=0/0 }
+MemoryCurrent=368640
+CPUUsageNSec=3388000
+######## dbus.service
+# /lib/systemd/system/dbus.service
+[Unit]
+Description=D-Bus System Message Bus
+Documentation=man:dbus-daemon(1)
+Requires=dbus.socket
+
+[Service]
+ExecStart=/usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+ExecReload=/usr/bin/dbus-send --print-reply --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig
+OOMScoreAdjust=-900
+Restart=no
+ExecStart={ path=/usr/bin/dbus-daemon ; argv[]=/usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=1245184
+CPUUsageNSec=50180000
+######## epmd.service
+# /lib/systemd/system/epmd.service
+[Unit]
+Description=Erlang Port Mapper Daemon
+After=network.target
+Requires=epmd.socket
+
+[Service]
+ExecStart=/usr/bin/epmd -systemd
+Type=simple
+StandardOutput=journal
+StandardError=journal
+User=epmd
+Group=epmd
+
+[Install]
+Also=epmd.socket
+WantedBy=multi-user.target
+Restart=no
+ExecStart={ path=/usr/bin/epmd ; argv[]=/usr/bin/epmd -systemd ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=909312
+CPUUsageNSec=10640000
+######## mongodb.service
+# /lib/systemd/system/mongodb.service
+[Unit]
+Description=An object/document-oriented database
+Documentation=man:mongod(1)
+After=network.target
+
+[Service]
+User=mongodb
+Group=mongodb
+RuntimeDirectory=mongodb
+RuntimeDirectoryMode=0755
+EnvironmentFile=-/etc/default/mongodb
+Environment=CONF=/etc/mongodb.conf
+Environment=SOCKETPATH=/run/mongodb
+ExecStart=/usr/bin/mongod --unixSocketPrefix=${SOCKETPATH} --config ${CONF} $DAEMON_OPTS
+LimitFSIZE=infinity
+LimitCPU=infinity
+LimitAS=infinity
+LimitNOFILE=64000
+LimitNPROC=64000
+
+[Install]
+WantedBy=multi-user.target
+Restart=no
+ExecStart={ path=/usr/bin/mongod ; argv[]=/usr/bin/mongod --unixSocketPrefix=${SOCKETPATH} --config ${CONF} $DAEMON_OPTS ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=48189440
+CPUUsageNSec=2134600000
+######## nginx.service
+# /lib/systemd/system/nginx.service
+[Unit]
+Description=nginx - high performance web server
+Documentation=https://nginx.org/en/docs/
+After=network-online.target remote-fs.target nss-lookup.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+PIDFile=/run/nginx.pid
+Environment="CONFFILE=/etc/nginx/nginx.conf"
+EnvironmentFile=-/etc/default/nginx
+ExecStart=/usr/sbin/nginx -c ${CONFFILE}
+ExecReload=/bin/sh -c "/bin/kill -s HUP $(/bin/cat /run/nginx.pid)"
+ExecStop=/bin/sh -c "/bin/kill -s TERM $(/bin/cat /run/nginx.pid)"
+
+[Install]
+WantedBy=multi-user.target
+
+# /lib/systemd/system/nginx.service.d/stale-config-cleanup.conf
+[Service]
+# Remove stale unix socket files left over from a previous hard crash.
+# nginx binds these sockets and cannot start if they exist from a prior session
+# that did not shut down cleanly. unifi-core normally cleans them in its pre-start
+# hook, but that runs after nginx due to service ordering (After=nginx.service).
+ExecStartPre=-/bin/sh -c 'rm -rf /data/unifi-core/config/http/* /var/run/uos-*.sock'
+Restart=no
+ExecStart={ path=/usr/sbin/nginx ; argv[]=/usr/sbin/nginx -c ${CONFFILE} ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=10215424
+CPUUsageNSec=231475000
+######## postgresql@14-main.service
+# /lib/systemd/system/postgresql@.service
+# systemd service template for PostgreSQL clusters. The actual instances will
+# be called "postgresql@version-cluster", e.g. "postgresql@9.3-main". The
+# variable %i expands to "version-cluster", %I expands to "version/cluster".
+# (%I breaks for cluster names containing dashes.)
+
+[Unit]
+Description=PostgreSQL Cluster %i
+AssertPathExists=/etc/postgresql/%I/postgresql.conf
+RequiresMountsFor=/etc/postgresql/%I /var/lib/postgresql/%I
+PartOf=postgresql.service
+ReloadPropagatedFrom=postgresql.service
+Before=postgresql.service
+# stop server before networking goes down on shutdown
+After=network.target
+
+[Service]
+Type=forking
+# -: ignore startup failure (recovery might take arbitrarily long)
+# the actual pg_ctl timeout is configured in pg_ctl.conf
+ExecStart=-/usr/bin/pg_ctlcluster --skip-systemctl-redirect %i start
+TimeoutStartSec=infinity
+ExecStop=/usr/bin/pg_ctlcluster --skip-systemctl-redirect -m fast %i stop
+TimeoutStopSec=1h
+ExecReload=/usr/bin/pg_ctlcluster --skip-systemctl-redirect %i reload
+PIDFile=/run/postgresql/%i.pid
+SyslogIdentifier=postgresql@%i
+# prevent OOM killer from choosing the postmaster (individual backends will
+# reset the score to 0)
+OOMScoreAdjust=-900
+# restarting automatically will prevent "pg_ctlcluster ... stop" from working,
+# so we disable it here. Also, the postmaster will restart by itself on most
+# problems anyway, so it is questionable if one wants to enable external
+# automatic restarts.
+#Restart=on-failure
+# (This should make pg_ctlcluster stop work, but doesn't:)
+#RestartPreventExitStatus=SIGINT SIGTERM
+
+[Install]
+WantedBy=multi-user.target
+Restart=no
+ExecStart={ path=/usr/bin/pg_ctlcluster ; argv[]=/usr/bin/pg_ctlcluster --skip-systemctl-redirect 14-main start ; ignore_errors=yes ; start_time=[Mon 2026-11-09 02:34:30 EST] ; stop_time=[Mon 2026-11-09 02:34:33 EST] ; pid=398 ; code=exited ; status=0 }
+MemoryCurrent=189972480
+CPUUsageNSec=2451709000
+######## rabbitmq-server.service
+# /lib/systemd/system/rabbitmq-server.service
+[Unit]
+Description=RabbitMQ Messaging Server
+After=network.target epmd.socket
+Wants=network.target epmd.socket
+
+[Service]
+Type=notify
+User=rabbitmq
+Group=rabbitmq
+UMask=0027
+NotifyAccess=all
+TimeoutStartSec=600
+LimitNOFILE=65536
+SyslogIdentifier=rabbitmq
+Restart=on-failure
+RestartSec=10
+WorkingDirectory=/var/lib/rabbitmq
+ExecStartPre=+/usr/share/unifi/gen-certs.sh
+ExecStart=/usr/lib/rabbitmq/bin/rabbitmq-server
+ExecStop=/usr/sbin/rabbitmqctl stop
+ExecStopPost=+/usr/lib/rabbitmq/bin/rabbitmq-on-exec-stop-post
+
+[Install]
+WantedBy=multi-user.target
+
+# /etc/systemd/system/rabbitmq-server.service.d/50-uos-cert-init.conf
+[Service]
+ExecStartPre=
+ExecStartPre=+/sbin/uos-rabbitmq-gen-certs-wrapper
+Restart=on-failure
+ExecStart={ path=/usr/lib/rabbitmq/bin/rabbitmq-server ; argv[]=/usr/lib/rabbitmq/bin/rabbitmq-server ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=85913600
+CPUUsageNSec=6105904000
+######## snmpd.service
+# /lib/systemd/system/snmpd.service
+[Unit]
+Description=Simple Network Management Protocol (SNMP) Daemon.
+After=network.target
+ConditionPathExists=/etc/snmp/snmpd.conf
+
+[Service]
+Type=simple
+ExecStartPre=/bin/mkdir -p /var/run/agentx
+ExecStart=/usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f -p /run/snmpd.pid
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+
+# /lib/systemd/system/snmpd.service.d/ui-snmpd.conf
+[Service]
+ExecStart=
+ExecStart=/usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f -p /run/snmpd.pid -n ui-snmp -c /etc/snmp/ui-snmpd.conf
+Restart=no
+ExecStart={ path=/usr/sbin/snmpd ; argv[]=/usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux,mteTrigger,mteTriggerConf -f -p /run/snmpd.pid -n ui-snmp -c /etc/snmp/ui-snmpd.conf ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=3203072
+CPUUsageNSec=127689000
+######## systemd-journald.service
+# /lib/systemd/system/systemd-journald.service
+#  SPDX-License-Identifier: LGPL-2.1-or-later
+#
+#  This file is part of systemd.
+#
+#  systemd is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation; either version 2.1 of the License, or
+#  (at your option) any later version.
+
+[Unit]
+Description=Journal Service
+Documentation=man:systemd-journald.service(8) man:journald.conf(5)
+DefaultDependencies=no
+Requires=systemd-journald.socket
+After=systemd-journald.socket systemd-journald-dev-log.socket systemd-journald-audit.socket syslog.socket
+Before=sysinit.target
+
+[Service]
+DeviceAllow=char-* rw
+ExecStart=/lib/systemd/systemd-journald
+FileDescriptorStoreMax=4224
+IPAddressDeny=any
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+OOMScoreAdjust=-250
+ProtectClock=yes
+Restart=always
+RestartSec=0
+RestrictAddressFamilies=AF_UNIX AF_NETLINK
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+RuntimeDirectory=systemd/journal
+RuntimeDirectoryPreserve=yes
+Sockets=systemd-journald.socket systemd-journald-dev-log.socket systemd-journald-audit.socket
+StandardOutput=null
+SystemCallArchitectures=native
+SystemCallErrorNumber=EPERM
+SystemCallFilter=@system-service
+Type=notify
+WatchdogSec=3min
+
+# In case you're wondering why CAP_SYS_PTRACE is needed, access to
+# /proc/<pid>/exe requires this capability. Thus if this capability is missing
+# the _EXE=/OBJECT_EXE= fields will be missing from the journal entries.
+CapabilityBoundingSet=CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_SYS_PTRACE CAP_SYSLOG CAP_AUDIT_CONTROL CAP_AUDIT_READ CAP_CHOWN CAP_DAC_READ_SEARCH CAP_FOWNER CAP_SETUID CAP_SETGID CAP_MAC_OVERRIDE
+
+# If there are many split up journal files we need a lot of fds to access them
+# all in parallel.
+LimitNOFILE=524288
+Restart=always
+ExecStart={ path=/lib/systemd/systemd-journald ; argv[]=/lib/systemd/systemd-journald ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=9728000
+CPUUsageNSec=105662000
+######## systemd-logind.service
+# /lib/systemd/system/systemd-logind.service
+#  SPDX-License-Identifier: LGPL-2.1-or-later
+#
+#  This file is part of systemd.
+#
+#  systemd is free software; you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as published by
+#  the Free Software Foundation; either version 2.1 of the License, or
+#  (at your option) any later version.
+
+[Unit]
+Description=User Login Management
+Documentation=man:sd-login(3)
+Documentation=man:systemd-logind.service(8)
+Documentation=man:logind.conf(5)
+Documentation=man:org.freedesktop.login1(5)
+
+Wants=user.slice modprobe@drm.service
+After=nss-user-lookup.target user.slice modprobe@drm.service
+ConditionPathExists=/lib/systemd/system/dbus.service
+
+# Ask for the dbus socket.
+Wants=dbus.socket
+After=dbus.socket
+
+[Service]
+BusName=org.freedesktop.login1
+CapabilityBoundingSet=CAP_SYS_ADMIN CAP_MAC_ADMIN CAP_AUDIT_CONTROL CAP_CHOWN CAP_DAC_READ_SEARCH CAP_DAC_OVERRIDE CAP_FOWNER CAP_SYS_TTY_CONFIG CAP_LINUX_IMMUTABLE
+DeviceAllow=block-* r
+DeviceAllow=char-/dev/console rw
+DeviceAllow=char-drm rw
+DeviceAllow=char-input rw
+DeviceAllow=char-tty rw
+DeviceAllow=char-vcs rw
+ExecStart=/lib/systemd/systemd-logind
+FileDescriptorStoreMax=512
+IPAddressDeny=any
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectProc=invisible
+ProtectClock=yes
+ProtectControlGroups=yes
+ProtectHome=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectSystem=strict
+ReadWritePaths=/etc /run
+Restart=always
+RestartSec=0
+RestrictAddressFamilies=AF_UNIX AF_NETLINK
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+RuntimeDirectory=systemd/sessions systemd/seats systemd/users systemd/inhibit systemd/shutdown
+RuntimeDirectoryPreserve=yes
+StateDirectory=systemd/linger
+SystemCallArchitectures=native
+SystemCallErrorNumber=EPERM
+SystemCallFilter=@system-service
+WatchdogSec=3min
+
+# Increase the default a bit in order to allow many simultaneous logins since
+# we keep one fd open per session.
+LimitNOFILE=524288
+Restart=always
+ExecStart={ path=/lib/systemd/systemd-logind ; argv[]=/lib/systemd/systemd-logind ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=1228800
+CPUUsageNSec=904765000
+######## ucs-agent.service
+# /lib/systemd/system/ucs-agent.service
+[Unit]
+Description = UniFi Credential Server Agent
+After = network.target postgresql.service
+Requires = postgresql.service
+Wants = 
+[Service]
+ExecStart= /usr/lib/ucs-agent/scripts/service/start.sh
+ExecStartPre = /usr/lib/ucs-agent/scripts/service/pre-start.sh
+
+Restart = on-failure
+RestartSec = 5
+StandardOutput = journal
+KillMode = process
+Type = notify
+PIDFile=/run/ucs-agent.pid
+LimitNOFILE=65536
+NotifyAccess=all
+
+[Install]
+WantedBy = multi-user.target
+Alias = ucs-agent.service
+Restart=on-failure
+ExecStart={ path=/usr/lib/ucs-agent/scripts/service/start.sh ; argv[]=/usr/lib/ucs-agent/scripts/service/start.sh ; ignore_errors=no ; start_time=[Mon 2026-11-09 02:34:33 EST] ; stop_time=[n/a] ; pid=568 ; code=(null) ; status=0/0 }
+MemoryCurrent=18907136
+CPUUsageNSec=1105901000
+######## uid-agent.service
+# /lib/systemd/system/uid-agent.service
+[Unit]
+Description = UID Agent service
+After = network.target unifi-core.service
+Requires = postgresql.service
+
+[Service]
+ExecStart= /usr/lib/uid-agent/scripts/service/start.sh
+ExecStartPre = /usr/lib/uid-agent/scripts/service/pre-start.sh
+Restart = on-failure
+StartLimitInterval = 300
+StartLimitBurst = 5
+RestartSec = 60
+WatchdogSec = 180
+StandardOutput = journal
+KillMode = process
+Type = notify
+PIDFile = /run/uid-agent.pid
+NotifyAccess=all
+LimitNOFILE=65536
+
+[Install]
+WantedBy = multi-user.target
+Restart=on-failure
+ExecStart={ path=/usr/lib/uid-agent/scripts/service/start.sh ; argv[]=/usr/lib/uid-agent/scripts/service/start.sh ; ignore_errors=no ; start_time=[Mon 2026-11-09 02:34:40 EST] ; stop_time=[n/a] ; pid=1152 ; code=(null) ; status=0/0 }
+MemoryCurrent=15765504
+CPUUsageNSec=2462467000
+######## ulp-go.service
+# /lib/systemd/system/ulp-go.service
+[Unit]
+Description = ULP-GO
+After = network.target postgresql.service
+Requires = postgresql.service
+
+# only allow to restarting 10 times in 1 hour
+# to avoid to too many restarts, and overwrite the logs
+# to reset the counter, run: systemctl reset-failed ulp-go
+StartLimitIntervalSec=1h
+StartLimitBurst=10
+
+[Service]
+ExecStart= /usr/lib/ulp-go/scripts/service/start.sh
+ExecStartPre = /usr/lib/ulp-go/scripts/service/pre-start.sh
+ExecReload = /usr/lib/ulp-go/scripts/service/reload.sh
+
+Restart = on-failure
+RestartSec = 5
+StandardOutput = journal
+KillMode = process
+Type = notify
+PIDFile=/run/ulp-go.pid
+LimitNOFILE=65536
+TimeoutStartSec=100
+NotifyAccess=all
+
+# ulp-go does not print lots of logs to journal, so it is same to set log level to debug
+# check ticket: https://ubiquiti.atlassian.net/browse/ULP-2474
+LogLevelMax=debug
+
+[Install]
+WantedBy = multi-user.target
+Alias = ulp.service
+Restart=on-failure
+ExecStart={ path=/usr/lib/ulp-go/scripts/service/start.sh ; argv[]=/usr/lib/ulp-go/scripts/service/start.sh ; ignore_errors=no ; start_time=[Mon 2026-11-09 02:34:34 EST] ; stop_time=[n/a] ; pid=632 ; code=(null) ; status=0/0 }
+MemoryCurrent=74825728
+CPUUsageNSec=2420104000
+######## unifi-core.service
+# /lib/systemd/system/unifi-core.service
+# This file was autogenerated by node-deb 0.10.7
+
+[Unit]
+Description=UniFi Core
+Requires=network.target
+Wants=ulp-go.service nginx.service postgresql-cluster@14-main.service postgresql@14-main.service 
+After=postgresql-cluster@14-main.service postgresql@14-main.service ulp-go.service ubnt-dpkg-cache.service nginx.service
+Before=unifi.service unifi-protect.service
+
+[Service]
+Type=notify
+MemoryMax=300M
+EnvironmentFile=-/etc/default/unifi-core
+EnvironmentFile=-/etc/default/unifi-core_advanced
+WorkingDirectory=/usr/share/unifi-core/app
+
+# /run/unifi-core hosts the JWKS file (jwks.json). Have systemd create it owned
+# by the service user with 0755 — traversable so app processes under other uids
+# can read jwks.json, writable only by us. RuntimeDirectoryPreserve=no (the
+# default) is intentional: keyRotation generates a fresh keypair + JWKS on every
+# boot, so nothing under it needs to survive a restart.
+RuntimeDirectory=unifi-core
+RuntimeDirectoryMode=0755
+
+ExecStartPre=/usr/share/unifi-core/app/hooks/pre-start
+
+ExecStart=/usr/bin/node24 --expose-gc --max-old-space-size=300 --openssl-legacy-provider --no-network-family-autoselection --dns-result-order=ipv4first /usr/share/unifi-core/app/service.js
+ExecReload=/bin/kill -HUP $MAINPID
+
+ExecStopPost=/usr/share/unifi-core/app/hooks/post-stop
+
+Restart=always
+WatchdogSec=2min
+User=unifi-core
+PermissionsStartOnly=true
+NotifyAccess=all
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+[Install]
+WantedBy=multi-user.target
+
+# /lib/systemd/system/unifi-core.service.d/cap.conf
+[Service]	
+User=root	
+AmbientCapabilities=
+
+# /lib/systemd/system/unifi-core.service.d/memory.conf
+[Service]
+MemoryMax=1024M
+MemorySwapMax=200M
+Restart=always
+ExecStart={ path=/usr/bin/node24 ; argv[]=/usr/bin/node24 --expose-gc --max-old-space-size=300 --openssl-legacy-provider --no-network-family-autoselection --dns-result-order=ipv4first /usr/share/unifi-core/app/service.js ; ignore_errors=no ; start_time=[Mon 2026-11-09 02:34:37 EST] ; stop_time=[n/a] ; pid=717 ; code=(null) ; status=0/0 }
+MemoryCurrent=241491968
+CPUUsageNSec=11498623000
+######## unifi-directory.service
+# /lib/systemd/system/unifi-directory.service
+[Unit]
+Description = UniFi Directory Service
+After = network.target postgresql.service
+Before = coturn.service
+Requires = postgresql.service
+Wants = 
+[Service]
+ExecStart= /usr/lib/unifi-directory/scripts/service/start.sh
+ExecStartPre = /usr/lib/unifi-directory/scripts/service/pre-start.sh
+
+Restart = on-failure
+RestartSec = 5
+StandardOutput = journal
+KillMode = process
+Type = notify
+PIDFile=/run/unifi-directory.pid
+LimitNOFILE=65536
+NotifyAccess=all
+
+[Install]
+WantedBy = multi-user.target
+Alias = directory.service
+Restart=on-failure
+ExecStart={ path=/usr/lib/unifi-directory/scripts/service/start.sh ; argv[]=/usr/lib/unifi-directory/scripts/service/start.sh ; ignore_errors=no ; start_time=[Mon 2026-11-09 02:34:33 EST] ; stop_time=[n/a] ; pid=554 ; code=(null) ; status=0/0 }
+MemoryCurrent=17207296
+CPUUsageNSec=1110795000
+######## unifi-identity-update.service
+# /lib/systemd/system/unifi-identity-update.service
+[Unit]
+Description = UniFi Identity Update
+After = network.target postgresql.service
+Requires = postgresql.service
+Wants = ulp-go.service
+[Service]
+ExecStart= /usr/lib/unifi-identity-update/scripts/service/start.sh
+ExecStartPre = /usr/lib/unifi-identity-update/scripts/service/pre-start.sh
+
+Restart = on-failure
+RestartSec = 5
+StandardOutput = journal
+KillMode = process
+Type = notify
+PIDFile=/run/unifi-identity-update.pid
+LimitNOFILE=65536
+NotifyAccess=all
+
+[Install]
+WantedBy = multi-user.target
+Alias = unifi-identity-update.service
+Restart=on-failure
+ExecStart={ path=/usr/lib/unifi-identity-update/scripts/service/start.sh ; argv[]=/usr/lib/unifi-identity-update/scripts/service/start.sh ; ignore_errors=no ; start_time=[Mon 2026-11-09 02:34:33 EST] ; stop_time=[n/a] ; pid=567 ; code=(null) ; status=0/0 }
+MemoryCurrent=7446528
+CPUUsageNSec=613960000
+######## unifi.service
+# /lib/systemd/system/unifi.service
+[Unit]
+Description=unifi
+Requires=network.target
+Wants=unifi-core.service
+After=network.target unifi-core.service
+
+[Service]
+User=unifi
+Restart=always
+TimeoutSec=15min
+KillMode=process
+NotifyAccess=main
+WorkingDirectory=/usr/lib/unifi/
+RuntimeDirectory=unifi
+SuccessExitStatus=143
+RestartPreventExitStatus=2
+Type=notify
+Environment="UNIFI_CORE_ENABLED=true" "UNIFI_MONGODB_SERVICE_ENABLED=false" "UNIFI_MQ_ENABLED=false" "UNIFI_EXTERNAL_DISK_INSERTED=" "UNIFI_JVM_OPTS=-Xmx512M -XX:+UseParallelGC"
+EnvironmentFile=-/etc/default/unifi
+EnvironmentFile=-/var/lib/unifi/env-overrides
+ExecStartPre=+/usr/sbin/unifi-network-service-helper init-uos
+ExecStart=/usr/bin/java \
+    -Dfile.encoding=UTF-8 \
+    -Djava.awt.headless=true \
+    -Dapple.awt.UIElement=true \
+    -Dunifi.core.enabled=${UNIFI_CORE_ENABLED} \
+    -Dunifi.mongodb.service.enabled=${UNIFI_MONGODB_SERVICE_ENABLED} \
+    -Dunifi.rmq.enabled=${UNIFI_MQ_ENABLED} \
+    -Dunifi.rmq.certificates=${UNIFI_MQ_CERTIFICATES_DIR} \
+    -Dunifi.external_disk.inserted=${UNIFI_EXTERNAL_DISK_INSERTED} \
+    -Dspring.profiles.active=unifi-os \
+    $UNIFI_JVM_OPTS \
+    -XX:+ExitOnOutOfMemoryError \
+    -XX:+CrashOnOutOfMemoryError \
+    -XX:ErrorFile=/usr/lib/unifi/logs/unifi_crash.log \
+    -Xlog:gc:logs/gc.log:time:filecount=2,filesize=5M \
+    --add-opens java.base/java.lang=ALL-UNNAMED \
+    --add-opens java.base/java.time=ALL-UNNAMED \
+    --add-opens java.base/sun.security.util=ALL-UNNAMED \
+    --add-opens java.base/java.io=ALL-UNNAMED \
+    --add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED \
+    -jar /usr/lib/unifi/lib/ace.jar
+ExecStartPost=/usr/sbin/unifi-network-service-helper service-started
+ExecStopPost=+/usr/sbin/unifi-network-service-helper cleanup
+
+[Install]
+WantedBy=multi-user.target
+Restart=always
+ExecStart={ path=/usr/bin/java ; argv[]=/usr/bin/java -Dfile.encoding=UTF-8 -Djava.awt.headless=true -Dapple.awt.UIElement=true -Dunifi.core.enabled=${UNIFI_CORE_ENABLED} -Dunifi.mongodb.service.enabled=${UNIFI_MONGODB_SERVICE_ENABLED} -Dunifi.rmq.enabled=${UNIFI_MQ_ENABLED} -Dunifi.rmq.certificates=${UNIFI_MQ_CERTIFICATES_DIR} -Dunifi.external_disk.inserted=${UNIFI_EXTERNAL_DISK_INSERTED} -Dspring.profiles.active=unifi-os $UNIFI_JVM_OPTS -XX:+ExitOnOutOfMemoryError -XX:+CrashOnOutOfMemoryError -XX:ErrorFile=/usr/lib/unifi/logs/unifi_crash.log -Xlog:gc:logs/gc.log:time:filecount=2,filesize=5M --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.time=ALL-UNNAMED --add-opens java.base/sun.security.util=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED -jar /usr/lib/unifi/lib/ace.jar ; ignore_errors=no ; start_time=[Mon 2026-11-09 02:34:39 EST] ; stop_time=[n/a] ; pid=1108 ; code=(null) ; status=0/0 }
+MemoryCurrent=801533952
+CPUUsageNSec=50584047000
+######## uos-agent.service
+# /usr/lib/systemd/system/uos-agent.service
+[Unit]
+Description=UniFi OS Agent
+After=network.target
+
+StartLimitIntervalSec=0
+
+[Service]
+Type=notify
+
+ExecStart=/usr/bin/uos-agent
+
+Restart=always
+RestartSec=1
+
+User=root
+Slice=uos.slice
+
+MemoryMax=128M
+MemorySwapMax=32M
+
+[Install]
+WantedBy=multi-user.target
+Restart=always
+ExecStart={ path=/usr/bin/uos-agent ; argv[]=/usr/bin/uos-agent ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=12865536
+CPUUsageNSec=67101000
+######## uos-discovery-client.service
+# /etc/systemd/system/uos-discovery-client.service
+[Unit]
+Description=UniFi OS discovery client
+After=network.target
+Before=unifi-core.service
+
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+
+ExecStart=/usr/bin/uos-discovery-client
+
+Restart=always
+RestartSec=1
+
+User=root
+
+[Install]
+WantedBy=multi-user.target
+Restart=always
+ExecStart={ path=/usr/bin/uos-discovery-client ; argv[]=/usr/bin/uos-discovery-client ; ignore_errors=no ; start_time=[n/a] ; stop_time=[n/a] ; pid=0 ; code=(null) ; status=0/0 }
+MemoryCurrent=5177344
+CPUUsageNSec=5173000

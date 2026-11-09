@@ -1,0 +1,70 @@
+MemTotal:       16366504 kB
+MemFree:        11042544 kB
+MemAvailable:   14006504 kB
+Buffers:          120296 kB
+Cached:          3107044 kB
+SwapCached:            0 kB
+Active:          1988240 kB
+Inactive:        2676124 kB
+Active(anon):    1552912 kB
+Inactive(anon):        0 kB
+Active(file):     435328 kB
+Inactive(file):  2676124 kB
+Unevictable:       46760 kB
+Mlocked:           43688 kB
+SwapTotal:       3145724 kB
+SwapFree:        3145724 kB
+Zswap:                 0 kB
+Zswapped:              0 kB
+Dirty:              2404 kB
+Writeback:             0 kB
+AnonPages:       1483800 kB
+Mapped:           766928 kB
+Shmem:            107164 kB
+KReclaimable:     198444 kB
+Slab:             313468 kB
+SReclaimable:     198444 kB
+SUnreclaim:       115024 kB
+KernelStack:       12892 kB
+PageTables:        21936 kB
+SecPageTables:         0 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    11328976 kB
+Committed_AS:    7463480 kB
+VmallocTotal:   13743895347199 kB
+VmallocUsed:       51816 kB
+VmallocChunk:          0 kB
+Percpu:             3072 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+CmaTotal:              0 kB
+CmaFree:         1478656 kB
+Unaccepted:            0 kB
+Balloon:               0 kB
+GPUActive:             0 kB
+GPUReclaim:            0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+DirectMap4k:      148608 kB
+DirectMap2M:     6137856 kB
+DirectMap1G:    12582912 kB
+               total        used        free      shared  buff/cache   available
+Mem:           15982        1853       10783         104        3345       13678
+Swap:           3071           0        3071
+4
+max
+max 100000
+some avg10=9.57 avg60=9.33 avg300=3.40 total=16843425
+full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+some avg10=0.00 avg60=0.00 avg300=0.00 total=3
+full avg10=0.00 avg60=0.00 avg300=0.00 total=3
