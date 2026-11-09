@@ -1,0 +1,50 @@
+configuration:
+  UOS_SYSTEM_IP:
+    name: UOS_SYSTEM_IP
+    description: >-
+      Hostname (recommended) or IP address devices use for inform.
+      If left empty, the IP address of Home Assistant's primary network interface is used.
+  UOS_TUNING:
+    name: Resource tuning
+    description: >-
+      Master switch for all CPU/RAM tuning below. Turn off to run the stock
+      configuration (takes effect on restart).
+  UOS_JVM_MAX_HEAP_MB:
+    name: UniFi Network max heap (MB)
+    description: >-
+      Caps the UniFi Network Java heap. Stock behaviour (0) lets it grow to 70% of
+      the host's RAM. 1024 suits most homes; raise it for hundreds of devices.
+  UOS_JVM_RETURN_MEMORY:
+    name: Return idle Java memory
+    description: >-
+      Lets UniFi Network give unused heap and native memory back to the system when idle.
+  UOS_DISABLE_UNUSED_MONGODB:
+    name: Disable unused MongoDB
+    description: >-
+      Don't start the stand-alone mongodb.service. UniFi Network runs its own MongoDB
+      and nothing connects to the stand-alone one.
+  UOS_JOURNAL_MAX_MB:
+    name: Journal size limit (MB)
+    description: >-
+      The systemd journal is kept in RAM. This caps it (0 = stock, about 10% of /run).
+  UOS_MASK_HOUSEKEEPING_TIMERS:
+    name: Mask housekeeping timers
+    description: >-
+      Stop apt-daily, apt-daily-upgrade and e2scrub timers, which do nothing useful in a container.
+  UOS_MALLOC_ARENA_MAX:
+    name: malloc arenas
+    description: >-
+      Limits glibc malloc arenas for all services to reduce memory fragmentation (0 = stock).
+  UOS_RABBITMQ_SCHEDULERS:
+    name: RabbitMQ scheduler threads
+    description: >-
+      Erlang scheduler threads for RabbitMQ (0 = stock, one per CPU). Testing showed no
+      measurable saving, so it's off by default.
+  UOS_JVM_EXTRA_OPTS:
+    name: Extra JVM options
+    description: Advanced. Extra flags appended to the UniFi Network JVM.
+  UOS_RESOURCE_REPORT_MIN:
+    name: Resource report interval (min)
+    description: >-
+      Logs memory and CPU per service to the app log every N minutes (0 = off). Works
+      with tuning on or off, so you can compare.

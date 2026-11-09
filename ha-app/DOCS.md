@@ -6,6 +6,30 @@ Runs [UniFi OS Server](https://blog.ui.com/article/introducing-unifi-os-server) 
 
 **UOS_SYSTEM_IP**: the hostname (recommended) or IP address devices use for inform. If left empty, the app uses the IP address of Home Assistant's primary network interface.
 
+## Resource tuning
+
+Optional CPU/RAM tuning, applied only through systemd drop-ins, environment files and service config (no UniFi code changes). Every file is regenerated on each start, so switching **Resource tuning** off and restarting restores the stock configuration. The same settings work as `UOS_*` environment variables for Docker/Kubernetes users.
+
+| Option | Default | Effect |
+|---|---|---|
+| Resource tuning | on | Master switch for everything below |
+| UniFi Network max heap (MB) | 1024 | Stock lets the Java heap grow to **70% of host RAM**, because Home Assistant doesn't set memory limits on apps. This caps it. |
+| Return idle Java memory | on | G1 periodic GC + native heap trim, so memory freed after spikes is returned to the host |
+| Disable unused MongoDB | on | Stops the stand-alone `mongodb.service` (port 27017), which has no clients. UniFi Network runs its own MongoDB on 27117. Only applied while the stock config has `UNIFI_MONGODB_SERVICE_ENABLED=false`. |
+| Journal size limit (MB) | 32 | The systemd journal lives in RAM (`/run`) and otherwise grows to about 10% of `/run` |
+| Mask housekeeping timers | on | `apt-daily`, `apt-daily-upgrade`, `e2scrub_all` |
+| malloc arenas | 2 | `MALLOC_ARENA_MAX` for all services, which limits glibc memory fragmentation |
+| RabbitMQ scheduler threads | 0 (stock) | Available, but no measurable saving in tests |
+| Extra JVM options | empty | Advanced |
+| Resource report interval (min) | 0 (off) | Logs one `[resources]` line per interval with memory/CPU per service. Works with tuning on **or off**. |
+
+## Comparing on your own install
+
+1. Under **Settings → Devices & services → Home Assistant Supervisor**, open this app's
+   device and enable its **CPU percent** and **Memory percent** sensors.
+2. Run for a day with **Resource tuning** off, then a day with it on (same version).
+3. Compare the history graphs, and the `[resources]` lines in the app log.
+
 ## Storage
 
 All UniFi OS Server data (`/data`, `/persistent`, `/var/log`, `/srv`, `/var/lib/unifi`, `/var/lib/mongodb`, and `/etc/rabbitmq/ssl`) is kept in the app's config folder (`addon_configs/<slug>`) and included in Home Assistant backups. Uninstalling the app keeps this folder unless you choose to also delete the app's data.

@@ -1,0 +1,75 @@
+name: UniFi OS Server (tuned test)
+version: "v1.8.0-tuned.3"
+slug: unifi_os_server_tuned
+description: UniFi OS Server with CPU/RAM tuning (test build, built locally)
+url: https://github.com/giuliodali/unifi-os-server
+homeassistant: "2026.8.0"
+arch:
+  - amd64
+  - aarch64
+hassio_api: true
+startup: services
+boot: auto
+init: false
+timeout: 120
+apparmor: false
+privileged:
+  - NET_ADMIN
+  - NET_RAW
+  - SYS_ADMIN
+map:
+  - type: app_config
+    read_only: false
+webui: "https://[HOST]:[PORT:443]/"
+ports:
+  443/tcp: 11443
+  8080/tcp: 8080
+  3478/udp: null
+  10003/udp: null
+  5005/tcp: null
+  9543/tcp: null
+  6789/tcp: null
+  8444/tcp: null
+  5514/udp: null
+  5671/tcp: null
+  8880/tcp: null
+  8881/tcp: null
+  8882/tcp: null
+ports_description:
+  443/tcp: UniFi OS Server GUI/API
+  8080/tcp: Device and application communication
+  3478/udp: STUN for device adoption and communication
+  10003/udp: Device discovery during adoption
+  5005/tcp: RTP control protocol
+  9543/tcp: UniFi Identity Hub
+  6789/tcp: UniFi mobile speed test
+  8444/tcp: Secure Portal for Hotspot
+  5514/udp: Remote syslog capture
+  5671/tcp: AQMPS
+  8880/tcp: Hotspot portal redirection (HTTP)
+  8881/tcp: Hotspot portal redirection (HTTP)
+  8882/tcp: Hotspot portal redirection (HTTP)
+options:
+  UOS_SYSTEM_IP: ""
+  UOS_TUNING: true
+  UOS_JVM_MAX_HEAP_MB: 1024
+  UOS_JVM_RETURN_MEMORY: true
+  UOS_DISABLE_UNUSED_MONGODB: true
+  UOS_JOURNAL_MAX_MB: 32
+  UOS_MASK_HOUSEKEEPING_TIMERS: true
+  UOS_MALLOC_ARENA_MAX: 2
+  UOS_RABBITMQ_SCHEDULERS: 0
+  UOS_JVM_EXTRA_OPTS: ""
+  UOS_RESOURCE_REPORT_MIN: 30
+schema:
+  UOS_SYSTEM_IP: str?
+  UOS_TUNING: bool
+  UOS_JVM_MAX_HEAP_MB: int(0,16384)
+  UOS_JVM_RETURN_MEMORY: bool
+  UOS_DISABLE_UNUSED_MONGODB: bool
+  UOS_JOURNAL_MAX_MB: int(0,1024)
+  UOS_MASK_HOUSEKEEPING_TIMERS: bool
+  UOS_MALLOC_ARENA_MAX: int(0,64)
+  UOS_RABBITMQ_SCHEDULERS: int(0,64)
+  UOS_JVM_EXTRA_OPTS: str?
+  UOS_RESOURCE_REPORT_MIN: int(0,1440)
