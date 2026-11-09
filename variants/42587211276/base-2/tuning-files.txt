@@ -1,0 +1,7 @@
+lrwxrwxrwx 1 root root    9 Nov  9 03:41 console-getty.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 03:41 container-getty@.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 03:41 getty.target -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 03:41 getty@.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 03:41 serial-getty@.service -> /dev/null
+drwxr-xr-x 1 root root 4096 Sep  8 12:42 timers.target.wants
+enabled
