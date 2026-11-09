@@ -1,0 +1,22 @@
+Nov 09 01:37:36 a8b1f3e88e76 java[1135]: Error occurred during initialization of VM
+Nov 09 01:37:36 a8b1f3e88e76 systemd[1]: unifi.service: Main process exited, code=exited, status=1/FAILURE
+Nov 09 01:37:36 a8b1f3e88e76 systemd[1]: unifi.service: Failed with result 'exit-code'.
+Nov 09 01:37:36 a8b1f3e88e76 systemd[1]: Failed to start unifi.
+Nov 09 01:37:36 a8b1f3e88e76 java[1308]: Error occurred during initialization of VM
+Nov 09 01:37:36 a8b1f3e88e76 systemd[1]: unifi.service: Main process exited, code=exited, status=1/FAILURE
+Nov 09 01:37:36 a8b1f3e88e76 systemd[1]: unifi.service: Failed with result 'exit-code'.
+Nov 09 01:37:36 a8b1f3e88e76 systemd[1]: Failed to start unifi.
+Nov 09 01:37:37 a8b1f3e88e76 java[1495]: Error occurred during initialization of VM
+Nov 09 01:37:37 a8b1f3e88e76 systemd[1]: unifi.service: Main process exited, code=exited, status=1/FAILURE
+Nov 09 01:37:37 a8b1f3e88e76 systemd[1]: unifi.service: Failed with result 'exit-code'.
+Nov 09 01:37:37 a8b1f3e88e76 systemd[1]: Failed to start unifi.
+Nov 09 01:37:37 a8b1f3e88e76 java[1620]: Error occurred during initialization of VM
+Nov 09 01:37:37 a8b1f3e88e76 systemd[1]: unifi.service: Main process exited, code=exited, status=1/FAILURE
+Nov 09 01:37:37 a8b1f3e88e76 systemd[1]: unifi.service: Failed with result 'exit-code'.
+Nov 09 01:37:37 a8b1f3e88e76 systemd[1]: Failed to start unifi.
+Nov 09 01:37:38 a8b1f3e88e76 java[1828]: Error occurred during initialization of VM
+Nov 09 01:37:38 a8b1f3e88e76 systemd[1]: unifi.service: Main process exited, code=exited, status=1/FAILURE
+Nov 09 01:37:38 a8b1f3e88e76 systemd[1]: unifi.service: Failed with result 'exit-code'.
+Nov 09 01:37:38 a8b1f3e88e76 systemd[1]: Failed to start unifi.
+Nov 09 01:37:38 a8b1f3e88e76 systemd[1]: unifi.service: Failed with result 'exit-code'.
+Nov 09 01:37:38 a8b1f3e88e76 systemd[1]: Failed to start unifi.

@@ -1,0 +1,1 @@
+BOOT_IMAGE=/vmlinuz-7.0.0-1017-azure root=PARTUUID=6a568bb8-39a2-40cc-a70f-9d67aaad1bc2 ro console=tty1 console=ttyS0 earlyprintk=ttyS0 nvme_core.io_timeout=240 rootflags=nobarrier,data=writeback,journal_async_commit,commit=30 panic=-1

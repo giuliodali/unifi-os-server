@@ -1,0 +1,40 @@
+    PID   RSS %CPU     TIME COMMAND
+    744 221328 0.8 00:00:21 unifi-core
+    214 100728 0.2 00:00:04 /usr/lib/erlang/erts-15.2.7.9/bin/beam.smp -W w -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -pc unicode -P 1048576 -t 5000000 -stbt db -zdbbl 128000 -sbwt none -sbwtdcpu none -sbwtdio none -- -root /usr/lib/erlang -bindir /usr/lib/erlang/erts-15.2.7.9/bin -progname erl -- -home /home/rabbitmq -- -pa  -noshell -noinput -s rabbit boot -boot start_sas
+    121 80824  0.2 00:00:05 /usr/bin/mongod --unixSocketPrefix=/run/mongodb --config /etc/mongodb.conf
+    667 73224  0.1 00:00:04 /usr/sbin/ulp-go-app --prop /usr/lib/ulp-go/config.props
+    609 57548  0.0 00:00:01 /usr/sbin/unifi-directory-app --prop /usr/lib/unifi-directory/config.props
+   1257 56004  0.1 00:00:02 /usr/sbin/uid-agent-app --props /usr/lib/uid-agent/config.props
+    432 28648  0.0 00:00:00 /usr/lib/postgresql/14/bin/postgres -D /data/postgresql/14/main/data -c config_file=/etc/postgresql/14/main/postgresql.conf
+    677 28700  0.0 00:00:00 postgres: 14/main: ulp-go ulp-go [local] idle
+    434 28404  0.0 00:00:00 postgres: 14/main: checkpointer 
+   1031 24476  0.0 00:00:00 postgres: 14/main: unifi-core unifi-core 127.0.0.1(51068) idle
+   1328 23864  0.0 00:00:00 postgres: 14/main: uid uid [local] idle
+    678 21848  0.0 00:00:00 postgres: 14/main: ulp-go ulp-go-syslog [local] idle
+    632 21860  0.0 00:00:00 postgres: 14/main: unifi-directory unifi-directory [local] idle
+    695 20884  0.0 00:00:00 postgres: 14/main: ulp-go ulp-go [local] idle
+    679 21220  0.0 00:00:00 postgres: 14/main: ulp-go ulp-go [local] idle
+    129 20532  0.0 00:00:00 /usr/bin/uos-agent
+    598 20100  0.0 00:00:00 /usr/sbin/unifi-identity-update-app --prop /usr/lib/unifi-identity-update/config.props
+   1043 18408  0.0 00:00:00 postgres: 14/main: unifi-core unifi-core 127.0.0.1(51080) idle
+    693 18108  0.0 00:00:00 postgres: 14/main: ulp-go ulp-go [local] idle
+   3626 18072  0.0 00:00:00 postgres: 14/main: uid uid [local] idle
+   4455 17740  0.0 00:00:00 postgres: 14/main: uid uid [local] idle
+   3588 17196  0.0 00:00:00 postgres: 14/main: ulp-go ulp-go-syslog [local] idle
+    655 17448  0.0 00:00:00 postgres: 14/main: unifi-directory unifi-directory [local] idle
+      1 11608  0.0 00:00:01 /sbin/init
+    141 10920  0.0 00:00:00 /usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux mteTrigger mteTriggerConf -f -p /run/snmpd.pid -n ui-snmp -c /etc/snmp/ui-snmpd.conf
+    436 10452  0.0 00:00:00 postgres: 14/main: walwriter 
+   1905  9664  0.0 00:00:00 nginx: worker process
+    153  9680  0.0 00:00:00 nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf
+   1904  9668  0.0 00:00:00 nginx: worker process
+   1906  9676  0.0 00:00:00 nginx: worker process
+   1907  9648  0.0 00:00:00 nginx: worker process
+    437  9548  0.0 00:00:00 postgres: 14/main: autovacuum launcher 
+    100  8624  0.0 00:00:00 /lib/systemd/systemd-journald
+    130  8484  0.0 00:00:00 /usr/bin/uos-discovery-client
+    439  8284  0.0 00:00:00 postgres: 14/main: logical replication launcher 
+    435  7912  0.0 00:00:00 postgres: 14/main: background writer 
+    114  6896  0.0 00:00:01 /lib/systemd/systemd-logind
+    438  6560  0.0 00:00:00 postgres: 14/main: stats collector 
+   1908  6340  0.0 00:00:00 nginx: cache manager process

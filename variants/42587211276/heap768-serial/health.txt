@@ -1,0 +1,13 @@
+network_status=
+core_https=200
+core_api=200
+failed_units=unifi.service 
+unifi=failed/restarts=5
+unifi-core=active/restarts=0
+rabbitmq-server=active/restarts=0
+ulp-go=active/restarts=0
+postgresql@14-main=active/restarts=0
+mongodb=active/restarts=0
+network_rmq_conn=0
+mongo27017_listening=1
+oom_kills=0
