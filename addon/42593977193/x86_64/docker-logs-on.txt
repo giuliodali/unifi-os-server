@@ -1,0 +1,17 @@
+Home Assistant detected, applying setup...
+Home Assistant setup applied!
+No UOS_UUID present, generating...
+Setting UOS_UUID to 86f91505-ba51-5744-8050-9eaeeab2e5e1
+Setting FIRMWARE_PLATFORM to linux-x64
+Setting PRODUCT_NAME to UniFi OS Server
+Setting APP_MODEL to UOSSERVER
+Setting APP_VERSION to 5.1.42
+Resource report every 30 min
+Applying resource tuning...
+  UniFi Network max heap: 1024MB
+  UniFi Network extra JVM opts: -XX:G1PeriodicGCInterval=60000 -XX:TrimNativeHeapInterval=60000
+  Unused mongodb.service disabled (UniFi Network uses its own mongod)
+  journald capped at 32MB
+  apt-daily, apt-daily-upgrade and e2scrub timers masked
+  MALLOC_ARENA_MAX=2
+Resource tuning applied!

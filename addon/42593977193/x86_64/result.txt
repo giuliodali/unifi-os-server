@@ -1,0 +1,41 @@
+PASS in sync: Dockerfile
+PASS in sync: uos-entrypoint.sh
+PASS in sync: uos-tuning.sh
+PASS in sync: uos-resource-report.sh
+PASS build from add-on folder
+PASS on: ready in 36s
+PASS on: network status ok
+PASS on: no failed units
+PASS on: UI 200
+FAIL on: no resource report
+PASS on: heap cap
+PASS on: MaxRAMPercentage removed
+PASS on: return-memory flags
+PASS on: required -D flags kept
+PASS on: unused mongodb not running
+PASS on: timers masked
+PASS on: malloc arenas
+PASS on: journal cap
+PASS off: ready in 31s
+PASS off: network status ok
+PASS off: no failed units
+PASS off: UI 200
+FAIL off: no resource report
+PASS off: stock JVM opts
+PASS off: mongodb restored
+PASS off: no tuning drop-ins
+PASS off: timers unmasked
+PASS on2: ready in 31s
+PASS on2: network status ok
+PASS on2: no failed units
+PASS on2: UI 200
+FAIL on2: no resource report
+PASS on2: heap cap
+PASS on2: MaxRAMPercentage removed
+PASS on2: return-memory flags
+PASS on2: required -D flags kept
+PASS on2: unused mongodb not running
+PASS on2: timers masked
+PASS on2: malloc arenas
+PASS on2: journal cap
+FAILED=1

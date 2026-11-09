@@ -1,0 +1,12 @@
+/                                                   507      - 1196322816        -        -
+system.slice                                        495      - 1178669056        -        -
+system.slice/unifi.service                          105      - 703156224        -        -
+system.slice/unifi-core.service                     270      - 182665216        -        -
+system.slice/system-postgresql.slice                 24      - 91820032        -        -
+system.slice/rabbitmq-server.service                 28      - 77537280        -        -
+system.slice/ulp-go.service                           9      - 34529280        -        -
+system.slice/unifi-directory.service                  9      - 18964480        -        -
+system.slice/ucs-agent.service                        9      - 18857984        -        -
+system.slice/uid-agent.service                       13      - 15323136        -        -
+system.slice/nginx.service                            6      - 10498048        -        -
+uos.slice                                             8      - 10121216        -        -
