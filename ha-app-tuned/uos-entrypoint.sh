@@ -1,0 +1,183 @@
+#!/bin/bash
+
+# Home Assistant detection
+if [ -f /data/options.json ]; then
+    echo "Home Assistant detected, applying setup..."
+
+    # Map app options to environment variables (read before /data is replaced below)
+    HA_SYSTEM_IP=$(jq -r '.UOS_SYSTEM_IP // empty' /data/options.json)
+
+    # Fall back to the IP of Home Assistant's primary network interface
+    if [ -z "$HA_SYSTEM_IP" ] && [ -n "${SUPERVISOR_TOKEN:-}" ]; then
+        HA_SYSTEM_IP=$(curl -fsS -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/network/info \
+            | jq -r '[.data.interfaces[] | select(.primary)][0].ipv4.address[0] // empty | split("/")[0]')
+    fi
+
+    if [ -n "$HA_SYSTEM_IP" ]; then
+        export UOS_SYSTEM_IP="$HA_SYSTEM_IP"
+    fi
+
+    # Map resource tuning options to UOS_* environment variables
+    for opt in UOS_TUNING UOS_JVM_MAX_HEAP_MB UOS_JVM_RETURN_MEMORY UOS_JVM_EXTRA_OPTS UOS_DISABLE_UNUSED_MONGODB \
+               UOS_RABBITMQ_SCHEDULERS UOS_JOURNAL_MAX_MB UOS_MASK_HOUSEKEEPING_TIMERS \
+               UOS_MALLOC_ARENA_MAX UOS_RESOURCE_REPORT_MIN; do
+        val=$(jq -r --arg k "$opt" 'if has($k) and .[$k] != null then .[$k] | tostring else empty end' /data/options.json)
+        if [ -n "$val" ]; then
+            export "$opt=$val"
+        fi
+    done
+
+    # Mount read-only cgroup v2
+    mount -o remount,rw /sys/fs/cgroup
+
+    # Setup tmpfs mounts
+    mount -t tmpfs -o exec tmpfs /tmp
+    mkdir -p /var/lib/journal /var/opt/unifi/tmp
+    mount -t tmpfs tmpfs /var/lib/journal
+    mount -t tmpfs -o size=64m tmpfs /var/opt/unifi/tmp
+
+    # Keep all persistent volumes, including /data, in the app config folder so
+    # uninstalling the app keeps or removes them together
+    for dir in /data /persistent /var/log /srv /var/lib/unifi /var/lib/mongodb /etc/rabbitmq/ssl; do
+        mkdir -p "/config$dir" "$dir"
+        mount --bind "/config$dir" "$dir"
+    done
+    
+    echo "Home Assistant setup applied!"
+fi
+
+# Persist UOS_UUID env var
+if [ ! -f /data/uos_uuid ]; then
+    if [ -n "${UOS_UUID+1}" ]; then
+        echo "Setting UOS_UUID to $UOS_UUID"
+        echo "$UOS_UUID" > /data/uos_uuid
+    else
+        echo "No UOS_UUID present, generating..."
+        UUID=$(cat /proc/sys/kernel/random/uuid)
+
+        # Spoof a v5 UUID
+        UOS_UUID=$(echo $UUID | sed s/./5/15)
+        echo "Setting UOS_UUID to $UOS_UUID"
+        echo "$UOS_UUID" > /data/uos_uuid
+    fi
+fi
+
+ARCH="$(dpkg --print-architecture)"
+if [ "$ARCH" == "amd64" ]; then
+    FIRMWARE_PLATFORM=linux-x64
+elif [ "$ARCH" == "arm64" ]; then
+    FIRMWARE_PLATFORM=arm64
+else
+    echo "FIRMWARE_PLATFORM not found for $ARCH"
+    exit 1
+fi
+
+echo "Setting FIRMWARE_PLATFORM to $FIRMWARE_PLATFORM"
+echo "Setting PRODUCT_NAME to $PRODUCT_NAME"
+echo "Setting APP_MODEL to $APP_MODEL"
+echo "Setting APP_VERSION to $APP_VERSION"
+
+# Read version from package.json and write version string
+echo "$FIRMWARE_PLATFORM" > /usr/lib/platform
+echo "$PRODUCT_NAME" > /usr/lib/product_name
+echo "$APP_MODEL" > /usr/lib/app_model
+# Protect Server is mounting /usr/lib/version
+if [ "$APP_MODEL" != "PROTECT_SERVER" ]; then
+    echo "$APP_MODEL.0000000.$APP_VERSION.0000000.000000.0000" > /usr/lib/version
+fi
+
+# Create eth0 alias to tap0 (requires NET_ADMIN cap & macvlan kernel module loaded on host) 
+if [ ! -d "/sys/devices/virtual/net/eth0" ] && [ -d "/sys/devices/virtual/net/tap0" ]; then
+    ip link add name eth0 link tap0 type macvlan
+    ip link set eth0 up
+fi 
+
+# Initialize nginx log dirs
+NXINX_LOG_DIR="/var/log/nginx"
+if [ ! -d "$NXINX_LOG_DIR" ]; then
+    mkdir -p "$NXINX_LOG_DIR"
+    chown nginx:nginx "$NXINX_LOG_DIR"
+    chmod 755 "$NXINX_LOG_DIR"
+fi
+
+# Initialize mongodb log dirs
+MONGODB_LOG_DIR="/var/log/mongodb"
+if [ ! -d "$MONGODB_LOG_DIR" ]; then
+    mkdir -p "$MONGODB_LOG_DIR"
+    chown mongodb:mongodb "$MONGODB_LOG_DIR"
+    chmod 755 "$MONGODB_LOG_DIR"
+fi
+
+# Initialize mongodb lib dirs
+MONGODB_LIB_DIR="/var/lib/mongodb"
+chown -R mongodb:mongodb "$MONGODB_LIB_DIR"
+
+# Initialize rabbitmq log dirs
+RABBITMQ_LOG_DIR="/var/log/rabbitmq"
+if [[ "$APP_MODEL" == "UOSSERVER" && ! -d "$RABBITMQ_LOG_DIR" ]]; then
+    mkdir -p "$RABBITMQ_LOG_DIR"
+    chown rabbitmq:rabbitmq "$RABBITMQ_LOG_DIR"
+    chmod 755 "$RABBITMQ_LOG_DIR"
+fi
+
+# Creating alias for mongodb service so that Network 10.6.77 and up doesn't fail
+if [[ "$APP_MODEL" == "UOSSERVER" && ! -e /etc/systemd/system/unifi-mongodb.service && ! -L /etc/systemd/system/unifi-mongodb.service ]]; then
+    ln -s /lib/systemd/system/mongodb.service /etc/systemd/system/unifi-mongodb.service
+fi
+
+# Apply Synology patches
+SYS_VENDOR="/sys/class/dmi/id/sys_vendor"
+if { [ -f "$SYS_VENDOR" ] && grep -q "Synology" "$SYS_VENDOR"; } \
+    || [ "${HARDWARE_PLATFORM:-}" = "synology" ]; then
+
+    if [ -n "${HARDWARE_PLATFORM+1}" ]; then
+        echo "Setting HARDWARE_PLATFORM to $HARDWARE_PLATFORM"
+    else
+        echo "Synology hardware found, applying patches..."
+    fi
+
+    # Set postgresql overrides
+    mkdir -p /etc/systemd/system/postgresql@14-main.service.d
+    {
+        echo "[Service]"
+        echo "PIDFile="
+    } > /etc/systemd/system/postgresql@14-main.service.d/override.conf
+
+    # Set rabbitmq overrides
+    mkdir -p /etc/systemd/system/rabbitmq-server.service.d
+    {
+        echo "[Service]"
+        echo "Type=simple"
+    } > /etc/systemd/system/rabbitmq-server.service.d/override.conf
+
+    # Set ulp-go overrides
+    mkdir -p /etc/systemd/system/ulp-go.service.d
+    {
+        echo "[Service]"
+        echo "Type=simple"
+    } > /etc/systemd/system/ulp-go.service.d/override.conf
+
+    echo "Synology patches applied!"
+fi
+
+# Set UOS_SYSTEM_IP
+UNIFI_SYSTEM_PROPERTIES="/var/lib/unifi/system.properties"
+if [ -n "${UOS_SYSTEM_IP+1}" ]; then
+    echo "Setting UOS_SYSTEM_IP to $UOS_SYSTEM_IP"
+    if [ ! -f "$UNIFI_SYSTEM_PROPERTIES" ]; then
+        echo "system_ip=$UOS_SYSTEM_IP" >> "$UNIFI_SYSTEM_PROPERTIES"
+    else
+        if grep -q "^system_ip=.*" "$UNIFI_SYSTEM_PROPERTIES"; then
+            sed -i 's/^system_ip=.*/system_ip='"$UOS_SYSTEM_IP"'/' "$UNIFI_SYSTEM_PROPERTIES"
+        else
+            echo "system_ip=$UOS_SYSTEM_IP" >> "$UNIFI_SYSTEM_PROPERTIES"
+        fi
+    fi
+fi
+
+# Apply resource tuning (systemd drop-ins / config only, no UniFi code changes)
+. /root/uos-tuning.sh
+apply_uos_tuning
+
+# Start systemd
+exec /sbin/init

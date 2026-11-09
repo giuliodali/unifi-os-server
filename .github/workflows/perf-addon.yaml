@@ -1,0 +1,22 @@
+name: perf-addon
+on:
+  push:
+    branches: [perf-lab]
+    paths: ['ha-app-tuned/**', 'experiments/addon-lifecycle.sh', '.github/workflows/perf-addon.yaml']
+permissions:
+  contents: write
+jobs:
+  lifecycle:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: experiments/addon-lifecycle.sh $PWD/out/lifecycle-$(uname -m)
+      - if: always()
+        run: experiments/publish.sh out/lifecycle-$(uname -m) addon/${{ github.run_id }}/$(uname -m)

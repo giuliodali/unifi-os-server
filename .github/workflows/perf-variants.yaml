@@ -2,7 +2,7 @@ name: perf-variants
 on:
   push:
     branches: [perf-lab]
-    paths: ['experiments/variants.json', 'uos-tuning.sh', 'uos-entrypoint.sh', 'experiments/measure.sh', '.github/workflows/perf-variants.yaml']
+    paths: ['experiments/variants.json']
 permissions:
   contents: write
 jobs:

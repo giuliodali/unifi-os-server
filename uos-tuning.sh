@@ -9,6 +9,8 @@
 #   UOS_TUNING                    master switch (default: true)
 #   UOS_JVM_MAX_HEAP_MB           UniFi Network max Java heap. 0 = stock
 #                                 (-XX:MaxRAMPercentage=70, i.e. 70% of host RAM)
+#   UOS_JVM_RETURN_MEMORY         let the JVM hand unused heap and malloc memory
+#                                 back to the OS when idle (G1 periodic GC + native trim)
 #   UOS_JVM_EXTRA_OPTS            extra JVM flags appended to UniFi Network
 #   UOS_DISABLE_UNUSED_MONGODB    don't start the stand-alone mongodb.service
 #                                 (UniFi Network runs its own mongod on 27117)
@@ -17,6 +19,8 @@
 #   UOS_JOURNAL_MAX_MB            cap for the in-RAM systemd journal (0 = stock)
 #   UOS_MASK_HOUSEKEEPING_TIMERS  mask apt-daily/apt-daily-upgrade/e2scrub timers
 #   UOS_MALLOC_ARENA_MAX          glibc malloc arenas for all services (0 = stock)
+#   UOS_RESOURCE_REPORT_MIN       log per-service memory/CPU every N minutes (0 = off).
+#                                 Independent of UOS_TUNING, so you can compare.
 
 TUNING_DIR=/etc/uos-tuning
 TUNING_TAG=90-uos-tuning
@@ -27,6 +31,8 @@ _is_pos_int() { [[ "$1" =~ ^[0-9]+$ ]] && [ "$1" -gt 0 ]; }
 
 _remove_uos_tuning() {
     rm -rf "$TUNING_DIR"
+    rm -f /etc/systemd/system/uos-resource-report.service /etc/systemd/system/uos-resource-report.timer \
+          /etc/systemd/system/timers.target.wants/uos-resource-report.timer
     rm -f /etc/systemd/system/*.service.d/$TUNING_TAG.conf \
           /etc/systemd/system.conf.d/$TUNING_TAG.conf \
           /etc/systemd/journald.conf.d/$TUNING_TAG.conf \
@@ -46,9 +52,37 @@ _dropin() { # unit, content
     printf '%s\n' "$2" > "/etc/systemd/system/$1.d/$TUNING_TAG.conf"
 }
 
+_setup_resource_report() {
+    local every="${UOS_RESOURCE_REPORT_MIN:-0}"
+    _is_pos_int "$every" || return 0
+    cat > /etc/systemd/system/uos-resource-report.service <<UNIT
+[Unit]
+Description=Log UniFi OS Server resource usage
+[Service]
+Type=oneshot
+ExecStart=/root/uos-resource-report.sh
+StandardOutput=journal+console
+UNIT
+    cat > /etc/systemd/system/uos-resource-report.timer <<UNIT
+[Unit]
+Description=Log UniFi OS Server resource usage every ${every} min
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=${every}min
+AccuracySec=10s
+[Install]
+WantedBy=timers.target
+UNIT
+    mkdir -p /etc/systemd/system/timers.target.wants
+    ln -sf /etc/systemd/system/uos-resource-report.timer /etc/systemd/system/timers.target.wants/
+    echo "Resource report every ${every} min"
+}
+
 apply_uos_tuning() {
     # Start clean so removed/changed options never leave stale config behind
     _remove_uos_tuning
+
+    _setup_resource_report
 
     if ! _is_true "${UOS_TUNING:-true}"; then
         echo "Resource tuning disabled (UOS_TUNING=${UOS_TUNING})"
@@ -59,6 +93,10 @@ apply_uos_tuning() {
 
     # --- UniFi Network JVM -------------------------------------------------
     local heap="${UOS_JVM_MAX_HEAP_MB:-0}" extra="${UOS_JVM_EXTRA_OPTS:-}"
+    if _is_true "${UOS_JVM_RETURN_MEMORY:-false}"; then
+        extra="-XX:G1PeriodicGCInterval=60000 -XX:TrimNativeHeapInterval=60000 $extra"
+        extra="${extra% }"
+    fi
     if _is_pos_int "$heap" || [ -n "$extra" ]; then
         # Start from the packaged options so required -D flags are kept
         local stock
@@ -133,14 +171,6 @@ Environment=\"RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=+S ${sched}:${sched} +SDcpu ${
         echo "  MALLOC_ARENA_MAX=$arenas"
     fi
 
-    # --- PostgreSQL ---------------------------------------------------------
-    local pgsb="${UOS_PG_SHARED_BUFFERS_MB:-0}"
-    if _is_pos_int "$pgsb"; then
-        for d in /etc/postgresql/*/main/conf.d; do
-            [ -d "$d" ] && printf 'shared_buffers = %sMB\n' "$pgsb" > "$d/$TUNING_TAG.conf"
-        done
-        echo "  PostgreSQL shared_buffers: ${pgsb}MB"
-    fi
 
     echo "Resource tuning applied!"
 }
