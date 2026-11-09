@@ -1,0 +1,10 @@
+[Service]
+EnvironmentFile=-/etc/uos-tuning/unifi.env
+UNIFI_JVM_OPTS="-Dunifi-os.server=true -Dorg.xerial.snappy.tempdir=/usr/lib/unifi/run -XX:+UseG1GC -Xss1024K -XX:-TieredCompilation -Xms256M -Xmx768M -XX:G1PeriodicGCInterval=60000 -XX:TrimNativeHeapInterval=60000"
+lrwxrwxrwx 1 root root    9 Nov  9 02:37 console-getty.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 02:37 container-getty@.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 02:37 getty.target -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 02:37 getty@.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 02:37 serial-getty@.service -> /dev/null
+drwxr-xr-x 1 root root 4096 Sep  8 11:42 timers.target.wants
+enabled

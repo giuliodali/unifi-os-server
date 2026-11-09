@@ -1,0 +1,12 @@
+Home Assistant detected, applying setup...
+Home Assistant setup applied!
+No UOS_UUID present, generating...
+Setting UOS_UUID to b603d0b9-5d6b-5d20-b2a2-bd68473b9878
+Setting FIRMWARE_PLATFORM to linux-x64
+Setting PRODUCT_NAME to UniFi OS Server
+Setting APP_MODEL to UOSSERVER
+Setting APP_VERSION to 5.1.42
+Applying resource tuning...
+  UniFi Network max heap: 768MB
+  UniFi Network extra JVM opts: -XX:G1PeriodicGCInterval=60000 -XX:TrimNativeHeapInterval=60000
+Resource tuning applied!
