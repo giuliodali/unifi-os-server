@@ -43,6 +43,7 @@ check_state(){ # mode
     docker exec uos bash -c 'cat /proc/$(pgrep -o -u unifi java)/environ | tr "\0" "\n" | grep -q MALLOC_ARENA_MAX=2' && pass "$mode: malloc arenas" || fail "$mode: malloc env"
     docker exec uos grep -q RuntimeMaxUse=32M /etc/systemd/journald.conf.d/90-uos-tuning.conf && pass "$mode: journal cap" || fail "$mode: journal cap"
   fi
+  docker exec uos bash -c 'systemctl list-timers uos-resource-report.timer --no-pager; journalctl -u uos-resource-report --no-pager | tail -5' > "$OUT/report-$mode.txt" 2>&1
   docker exec uos bash -c 'systemd-cgtop -b -n1 --depth=2 -m --raw | head -12' > "$OUT/cgtop-$mode.txt"
 }
 check_state on

@@ -60,8 +60,10 @@ _setup_resource_report() {
 Description=Log UniFi OS Server resource usage
 [Service]
 Type=oneshot
-ExecStart=/root/uos-resource-report.sh
-StandardOutput=journal+console
+# systemd has no console in a container: write to PID 1's stdout, which is
+# what Docker (and the Home Assistant app log) collects
+ExecStart=/bin/sh -c '/root/uos-resource-report.sh | tee -a /proc/1/fd/1'
+StandardOutput=journal
 UNIT
     cat > /etc/systemd/system/uos-resource-report.timer <<UNIT
 [Unit]
