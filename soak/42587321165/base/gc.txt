@@ -1,0 +1,3 @@
+[2026-11-09T11:50:00.243+0000] GC(43) Pause Cleanup 129M->129M(320M) 0.032ms
+[2026-11-09T11:50:00.244+0000] GC(43) Concurrent Mark Cycle 225.699ms
+[2026-11-09T13:23:48.353+0000] GC(44) Pause Young (Prepare Mixed) (G1 Evacuation Pause) 296M->128M(320M) 8.922ms

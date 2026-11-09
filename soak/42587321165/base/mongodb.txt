@@ -1,0 +1,14 @@
+-- Journal begins at Mon 2026-11-09 04:08:09 EST, ends at Mon 2026-11-09 09:08:15 EST. --
+Nov 09 04:08:09 365df5b2661f systemd[1]: Started An object/document-oriented database.
+● mongodb.service - An object/document-oriented database
+     Loaded: loaded (/lib/systemd/system/mongodb.service; enabled; vendor preset: enabled)
+     Active: active (running) since Mon 2026-11-09 04:08:09 EST; 5h 0min ago
+       Docs: man:mongod(1)
+   Main PID: 105 (mongod)
+      Tasks: 24 (limit: 2615)
+     Memory: 46.9M
+        CPU: 39.495s
+     CGroup: /system.slice/mongodb.service
+             └─105 /usr/bin/mongod --unixSocketPrefix=/run/mongodb --config /etc/mongodb.conf
+
+Nov 09 04:08:09 365df5b2661f systemd[1]: Started An object/document-oriented database.

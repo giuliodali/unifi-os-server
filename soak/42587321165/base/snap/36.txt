@@ -1,0 +1,26 @@
+/                                                   528      - 1584394240        -        -
+system.slice                                        516      - 1562812416        -        -
+system.slice/unifi.service                          105      - 737701888        -        -
+system.slice/unifi-core.service                     269      - 281763840        -        -
+system.slice/system-postgresql.slice                 25      - 190025728        -        -
+system.slice/rabbitmq-server.service                 28      - 82952192        -        -
+system.slice/ulp-go.service                           8      - 78905344        -        -
+system.slice/system-postgresql\x2dcluster.slice       -      - 47390720        -        -
+system.slice/mongodb.service                         24      - 47382528        -        -
+system.slice/uid-agent.service                       12      - 19259392        -        -
+system.slice/ucs-agent.service                        9      - 19079168        -        -
+system.slice/unifi-directory.service                  9      - 18038784        -        -
+uos.slice                                             8      - 12771328        -        -
+uos.slice/uos-agent.service                           8      - 12754944        -        -
+system.slice/nginx.service                            7      - 10846208        -        -
+system.slice/systemd-journald.service                 1      -  9723904        -        -
+system.slice/unifi-identity-update.service            8      -  7503872        -        -
+init.scope                                            4      -  6053888        -        -
+system.slice/uos-discovery-client.service             6      -  5165056        -        -
+system.slice/snmpd.service                            1      -  3190784        -        -
+system.slice/systemd-logind.service                   1      -  1224704        -        -
+system.slice/dbus.service                             1      -  1220608        -        -
+system.slice/cron.service                             1      -   364544        -        -
+system.slice/epmd.service                             1      -   356352        -        -
+dev-hugepages.mount                                   -      -     8192        -        -
+Archived and active journals take up 8.0M in the file system.
