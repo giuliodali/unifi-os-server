@@ -1,0 +1,17 @@
+unifi.service 628035584 43453530000
+unifi-core.service 251039744 17909114000
+postgresql@14-main.service 175079424 3245704000
+rabbitmq-server.service 86515712 10719620000
+ulp-go.service 74805248 3581712000
+unifi-directory.service 17674240 1394364000
+uid-agent.service 15687680 2570587000
+uos-agent.service 11952128 57319000
+nginx.service 9953280 202030000
+systemd-journald.service 9719808 103451000
+unifi-identity-update.service 7094272 526902000
+uos-discovery-client.service 5181440 4597000
+snmpd.service 3477504 379999000
+systemd-logind.service 1212416 1261452000
+dbus.service 1196032 48262000
+cron.service 442368 24250000
+epmd.service 417792 19301000
