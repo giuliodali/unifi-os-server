@@ -1,0 +1,7 @@
+-- Journal begins at Mon 2026-11-09 01:34:35 CST, ends at Mon 2026-11-09 01:39:28 CST. --
+Nov 09 01:34:36 c5f8b6a3b64d systemd-logind[83]: /usr/lib/systemd/logind.conf.d/rebootkey-ignore.conf:3: Unknown key name 'HandleRebootKeyLongPress' in section 'Login', ignoring.
+Nov 09 01:34:47 c5f8b6a3b64d unifi[1036]: user: unifi, group: unifi
+Nov 09 01:34:47 c5f8b6a3b64d unifi[1037]: data: /var/lib/unifi, logs: /data/unifi/logs, run: /data/unifi/run, additional storage: /srv/unifi
+Nov 09 01:34:47 c5f8b6a3b64d unifi[1038]: tmpfs: /var/opt/unifi/tmp, size: 64m
+Nov 09 01:34:47 c5f8b6a3b64d unifi[1100]: Skipping load-environment...
+Nov 09 01:34:47 c5f8b6a3b64d unifi[1101]: init-uos complete...

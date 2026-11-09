@@ -1,0 +1,9 @@
+Home Assistant detected, applying setup...
+Home Assistant setup applied!
+No UOS_UUID present, generating...
+Setting UOS_UUID to 51eb3f8a-fd41-5762-adfe-406633ac6239
+Setting FIRMWARE_PLATFORM to arm64
+Setting PRODUCT_NAME to UniFi OS Server
+Setting APP_MODEL to UOSSERVER
+Setting APP_VERSION to 5.1.42
+Setting UOS_SYSTEM_IP to 127.0.0.1

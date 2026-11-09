@@ -1,0 +1,9 @@
+NEXT                        LEFT          LAST PASSED UNIT                         ACTIVATES
+Mon 2026-11-09 01:49:35 CST 10min left    n/a  n/a    systemd-tmpfiles-clean.timer systemd-tmpfiles-clean.service
+Mon 2026-11-09 06:17:44 CST 4h 38min left n/a  n/a    apt-daily-upgrade.timer      apt-daily-upgrade.service
+Mon 2026-11-09 17:13:41 CST 15h left      n/a  n/a    apt-daily.timer              apt-daily.service
+Sun 2026-11-15 03:10:25 CST 6 days left   n/a  n/a    e2scrub_all.timer            e2scrub_all.service
+n/a                         n/a           n/a  n/a    fstrim.timer                 fstrim.service
+n/a                         n/a           n/a  n/a    logrotate.timer              
+
+6 timers listed.

@@ -1,0 +1,200 @@
+top - 01:39:28 up 5 min,  0 users,  load average: 0.25, 0.47, 0.27
+Tasks:  56 total,   1 running,  55 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  1.6 us,  1.6 sy,  0.0 ni, 96.8 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  15941.5 total,  10490.0 free,   1800.4 used,   3651.1 buff/cache
+MiB Swap:   3072.0 total,   3072.0 free,      0.0 used.  13781.1 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   22132  10964   7556 S   0.0   0.1   0:00.72 systemd
+     69 root      20   0   26500   8148   7308 S   0.0   0.0   0:00.07 systemd+
+     82 message+  20   0    8260   4292   3316 S   0.0   0.0   0:00.02 dbus-da+
+     83 root      20   0   14120   6236   5492 S   0.0   0.0   0:00.50 systemd+
+     89 epmd      20   0    6028   2440   2172 S   0.0   0.0   0:00.00 epmd
+     90 mongodb   20   0 1171524  78200  33212 S   0.0   0.5   0:00.50 mongod
+     97 root      20   0  564368  20252   9440 S   0.0   0.1   0:00.06 uos-age+
+     98 root      20   0  347160   7676   2920 S   0.0   0.0   0:00.00 uos-dis+
+    112 Debian-+  20   0   19504  10192   7360 S   0.0   0.1   0:00.06 snmpd
+    119 root      20   0   16312   9984   5012 S   0.0   0.1   0:00.07 nginx
+    204 rabbitmq  20   0 2673972 102236  37332 S   0.0   0.6   0:01.92 beam.smp
+    215 rabbitmq  20   0    1956   1252   1168 S   0.0   0.0   0:00.00 erl_chi+
+    299 rabbitmq  20   0    2672   1076    984 S   0.0   0.0   0:00.00 inet_ge+
+    300 rabbitmq  20   0    2812   1520   1408 S   0.0   0.0   0:00.00 inet_ge+
+    401 postgres  20   0  212716  26784  24840 S   0.0   0.2   0:00.07 postgres
+    403 postgres  20   0  213332  22020  19676 S   0.0   0.1   0:00.02 postgres
+    404 postgres  20   0  212716   6664   4680 S   0.0   0.0   0:00.01 postgres
+    405 postgres  20   0  212716   9512   7536 S   0.0   0.1   0:00.01 postgres
+    406 postgres  20   0  213388   8296   5888 S   0.0   0.1   0:00.00 postgres
+    407 postgres  20   0   68032   5464   3012 S   0.0   0.0   0:00.02 postgres
+    408 postgres  20   0  213272   7324   5108 S   0.0   0.0   0:00.00 postgres
+    411 rabbitmq  20   0    2068   1308   1216 S   0.0   0.0   0:00.00 sh
+    561 unifi-d+  20   0 1349576  56752  40116 S   0.0   0.3   0:00.27 unifi-d+
+    564 ucs-age+  20   0 1269128  50368  33264 S   0.0   0.3   0:00.27 ucs-age+
+    586 postgres  20   0  215064  20528  16432 S   0.0   0.1   0:00.08 postgres
+    591 postgres  20   0  214856  19376  15640 S   0.0   0.1   0:00.04 postgres
+    594 ucs-upd+  20   0 1241800  19568  12732 S   0.0   0.1   0:00.03 unifi-i+
+    603 postgres  20   0  214744  17192  13780 S   0.0   0.1   0:00.01 postgres
+    611 postgres  20   0  214924  18576  14844 S   0.0   0.1   0:00.01 postgres
+    614 postgres  20   0  214820  17384  13892 S   0.0   0.1   0:00.02 postgres
+    616 postgres  20   0  214468  15352  12228 S   0.0   0.1   0:00.00 postgres
+    635 ulp-go    20   0  763892  71664  42384 S   0.0   0.4   0:01.10 ulp-go-+
+    644 postgres  20   0  217704  29468  23600 S   0.0   0.2   0:00.35 postgres
+    645 postgres  20   0  216192  20432  15524 S   0.0   0.1   0:00.07 postgres
+    646 postgres  20   0  215492  23272  18932 S   0.0   0.1   0:00.08 postgres
+    661 postgres  20   0  213916  16324  13368 S   0.0   0.1   0:00.00 postgres
+    712 root      20   0   10.4g 200240  75152 S   0.0   1.2   0:04.69 unifi-c+
+    998 postgres  20   0  216916  25296  20444 S   0.0   0.2   0:00.06 postgres
+   1012 postgres  20   0  214372  17052  14020 S   0.0   0.1   0:00.00 postgres
+   1103 unifi     20   0   14.6g 720608  25772 S   0.0   4.4   0:33.78 java
+   1172 postgres  20   0  215352  18764  14940 S   0.0   0.1   0:00.02 postgres
+   1226 uid       20   0  758944  52896  38852 S   0.0   0.3   0:01.08 uid-age+
+   1260 postgres  20   0  216368  22656  18124 S   0.0   0.1   0:00.22 postgres
+   1282 root      20   0    5592   2588   2324 S   0.0   0.0   0:00.00 cron
+   1283 postgres  20   0  218352  22944  16224 S   0.0   0.1   0:00.04 postgres
+   1291 postgres  20   0  214384  18048  15016 S   0.0   0.1   0:00.00 postgres
+   1418 unifi     20   0 1196320  93772  33708 S   0.0   0.6   0:01.17 mongod
+   1475 postgres  20   0  214772  17660  14080 S   0.0   0.1   0:00.02 postgres
+   1567 nginx     20   0   16316   6704   1732 S   0.0   0.0   0:00.00 nginx
+   1568 nginx     20   0   16316   6704   1732 S   0.0   0.0   0:00.00 nginx
+   1569 nginx     20   0   16316   6704   1732 S   0.0   0.0   0:00.00 nginx
+   1570 nginx     20   0   16316   6704   1732 S   0.0   0.0   0:00.00 nginx
+   1571 nginx     20   0   16316   6676   1700 S   0.0   0.0   0:00.00 nginx
+   2304 root      20   0    3700   2620   2372 S   0.0   0.0   0:00.00 bash
+   2310 root      20   0    6772   2832   2368 R   0.0   0.0   0:00.00 top
+   2311 root      20   0    1976   1076    996 S   0.0   0.0   0:00.00 head
+
+top - 01:39:43 up 6 min,  0 users,  load average: 0.26, 0.46, 0.27
+Tasks:  57 total,   1 running,  56 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.5 us,  0.6 sy,  0.0 ni, 98.8 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  15941.5 total,  10526.8 free,   1763.6 used,   3651.2 buff/cache
+MiB Swap:   3072.0 total,   3072.0 free,      0.0 used.  13817.9 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    712 root      20   0   10.4g 200384  75152 S   0.4   1.2   0:04.75 unifi-c+
+     90 mongodb   20   0 1171524  78280  33212 S   0.2   0.5   0:00.53 mongod
+   1103 unifi     20   0   14.6g 720612  25772 S   0.2   4.4   0:33.81 java
+   1418 unifi     20   0 1196320  93780  33708 S   0.2   0.6   0:01.20 mongod
+    204 rabbitmq  20   0 2670748 100788  37332 S   0.1   0.6   0:01.94 beam.smp
+    561 unifi-d+  20   0 1349576  56752  40116 S   0.1   0.3   0:00.28 unifi-d+
+    564 ucs-age+  20   0 1269128  50452  33328 S   0.1   0.3   0:00.28 ucs-age+
+    614 postgres  20   0  214820  17384  13892 S   0.1   0.1   0:00.03 postgres
+    635 ulp-go    20   0  763892  70456  42512 S   0.1   0.4   0:01.11 ulp-go-+
+      1 root      20   0   22132  10964   7556 S   0.0   0.1   0:00.72 systemd
+     69 root      20   0   26500   8148   7308 S   0.0   0.0   0:00.07 systemd+
+     82 message+  20   0    8260   4292   3316 S   0.0   0.0   0:00.02 dbus-da+
+     83 root      20   0   14120   6236   5492 S   0.0   0.0   0:00.50 systemd+
+     89 epmd      20   0    6028   2440   2172 S   0.0   0.0   0:00.00 epmd
+     97 root      20   0  564368  20252   9440 S   0.0   0.1   0:00.06 uos-age+
+     98 root      20   0  347160   7676   2920 S   0.0   0.0   0:00.00 uos-dis+
+    112 Debian-+  20   0   19504  10196   7360 S   0.0   0.1   0:00.06 snmpd
+    119 root      20   0   16312   9984   5012 S   0.0   0.1   0:00.07 nginx
+    215 rabbitmq  20   0    1956   1252   1168 S   0.0   0.0   0:00.00 erl_chi+
+    299 rabbitmq  20   0    2672   1076    984 S   0.0   0.0   0:00.00 inet_ge+
+    300 rabbitmq  20   0    2812   1520   1408 S   0.0   0.0   0:00.00 inet_ge+
+    401 postgres  20   0  212716  26784  24840 S   0.0   0.2   0:00.07 postgres
+    403 postgres  20   0  213332  22020  19676 S   0.0   0.1   0:00.02 postgres
+    404 postgres  20   0  212716   6664   4680 S   0.0   0.0   0:00.01 postgres
+    405 postgres  20   0  212716   9512   7536 S   0.0   0.1   0:00.01 postgres
+    406 postgres  20   0  213388   8296   5888 S   0.0   0.1   0:00.00 postgres
+    407 postgres  20   0   68032   5464   3012 S   0.0   0.0   0:00.02 postgres
+    408 postgres  20   0  213272   7324   5108 S   0.0   0.0   0:00.00 postgres
+    411 rabbitmq  20   0    2068   1308   1216 S   0.0   0.0   0:00.00 sh
+    586 postgres  20   0  215064  20528  16432 S   0.0   0.1   0:00.08 postgres
+    591 postgres  20   0  214856  19376  15640 S   0.0   0.1   0:00.04 postgres
+    594 ucs-upd+  20   0 1241800  19568  12732 S   0.0   0.1   0:00.03 unifi-i+
+    603 postgres  20   0  214744  17416  14004 S   0.0   0.1   0:00.01 postgres
+    611 postgres  20   0  214924  18932  15192 S   0.0   0.1   0:00.01 postgres
+    616 postgres  20   0  214468  15352  12228 S   0.0   0.1   0:00.00 postgres
+    644 postgres  20   0  217704  29468  23600 S   0.0   0.2   0:00.35 postgres
+    645 postgres  20   0  216192  20432  15524 S   0.0   0.1   0:00.07 postgres
+    646 postgres  20   0  215492  23272  18932 S   0.0   0.1   0:00.08 postgres
+    661 postgres  20   0  213916  16624  13624 S   0.0   0.1   0:00.00 postgres
+    998 postgres  20   0  216916  25296  20444 S   0.0   0.2   0:00.06 postgres
+   1012 postgres  20   0  214372  17052  14020 S   0.0   0.1   0:00.00 postgres
+   1172 postgres  20   0  215352  18764  14940 S   0.0   0.1   0:00.02 postgres
+   1226 uid       20   0  758944  54408  38852 S   0.0   0.3   0:01.08 uid-age+
+   1260 postgres  20   0  216368  22656  18124 S   0.0   0.1   0:00.22 postgres
+   1282 root      20   0    5592   2588   2324 S   0.0   0.0   0:00.00 cron
+   1283 postgres  20   0  218352  22944  16224 S   0.0   0.1   0:00.04 postgres
+   1291 postgres  20   0  214384  18048  15016 S   0.0   0.1   0:00.00 postgres
+   1475 postgres  20   0  214772  17664  14080 S   0.0   0.1   0:00.02 postgres
+   1567 nginx     20   0   16316   6704   1732 S   0.0   0.0   0:00.00 nginx
+   1568 nginx     20   0   16316   6704   1732 S   0.0   0.0   0:00.00 nginx
+   1569 nginx     20   0   16316   6704   1732 S   0.0   0.0   0:00.00 nginx
+   1570 nginx     20   0   16316   6704   1732 S   0.0   0.0   0:00.00 nginx
+   1571 nginx     20   0   16316   6676   1700 S   0.0   0.0   0:00.00 nginx
+   2304 root      20   0    3700   2620   2372 S   0.0   0.0   0:00.00 bash
+   2310 root      20   0    6740   2848   2368 R   0.0   0.0   0:00.00 top
+   2311 root      20   0    1976   1144   1060 S   0.0   0.0   0:00.00 head
+   2354 root      20   0    5936   2428   2256 S   0.0   0.0   0:00.00 ping
+
+top - 01:39:58 up 6 min,  0 users,  load average: 0.20, 0.44, 0.26
+Tasks:  57 total,   1 running,  56 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.4 us,  0.6 sy,  0.0 ni, 99.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  15941.5 total,  10527.5 free,   1762.7 used,   3651.3 buff/cache
+MiB Swap:   3072.0 total,   3072.0 free,      0.0 used.  13818.8 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+    712 root      20   0   10.4g 200468  75152 S   0.5   1.2   0:04.83 unifi-c+
+   1103 unifi     20   0   14.6g 720616  25772 S   0.3   4.4   0:33.86 java
+   1418 unifi     20   0 1196320  93780  33708 S   0.3   0.6   0:01.24 mongod
+     90 mongodb   20   0 1171524  78280  33212 S   0.2   0.5   0:00.56 mongod
+    403 postgres  20   0  213332  23912  21532 S   0.1   0.1   0:00.04 postgres
+    635 ulp-go    20   0  763892  70456  42512 S   0.1   0.4   0:01.13 ulp-go-+
+    204 rabbitmq  20   0 2670748 100788  37332 S   0.1   0.6   0:01.95 beam.smp
+    406 postgres  20   0  213388   8296   5888 S   0.1   0.1   0:00.01 postgres
+    407 postgres  20   0   68032   5464   3012 S   0.1   0.0   0:00.03 postgres
+    561 unifi-d+  20   0 1349576  56752  40116 S   0.1   0.3   0:00.29 unifi-d+
+   1226 uid       20   0  758944  54472  38916 S   0.1   0.3   0:01.09 uid-age+
+   1291 postgres  20   0  214384  18048  15016 S   0.1   0.1   0:00.01 postgres
+      1 root      20   0   22132  10964   7556 S   0.0   0.1   0:00.72 systemd
+     69 root      20   0   26500   8148   7308 S   0.0   0.0   0:00.07 systemd+
+     82 message+  20   0    8260   4292   3316 S   0.0   0.0   0:00.02 dbus-da+
+     83 root      20   0   14120   6236   5492 S   0.0   0.0   0:00.50 systemd+
+     89 epmd      20   0    6028   2440   2172 S   0.0   0.0   0:00.00 epmd
+     97 root      20   0  564368  20252   9440 S   0.0   0.1   0:00.06 uos-age+
+     98 root      20   0  347160   7676   2920 S   0.0   0.0   0:00.00 uos-dis+
+    112 Debian-+  20   0   19504  10196   7360 S   0.0   0.1   0:00.06 snmpd
+    119 root      20   0   16312   9984   5012 S   0.0   0.1   0:00.07 nginx
+    215 rabbitmq  20   0    1956   1252   1168 S   0.0   0.0   0:00.00 erl_chi+
+    299 rabbitmq  20   0    2672   1076    984 S   0.0   0.0   0:00.00 inet_ge+
+    300 rabbitmq  20   0    2812   1520   1408 S   0.0   0.0   0:00.00 inet_ge+
+    401 postgres  20   0  212716  26784  24840 S   0.0   0.2   0:00.07 postgres
+    404 postgres  20   0  212716   6664   4680 S   0.0   0.0   0:00.01 postgres
+    405 postgres  20   0  212716   9512   7536 S   0.0   0.1   0:00.01 postgres
+    408 postgres  20   0  213272   7324   5108 S   0.0   0.0   0:00.00 postgres
+    411 rabbitmq  20   0    2068   1308   1216 S   0.0   0.0   0:00.00 sh
+    564 ucs-age+  20   0 1269128  50456  33328 S   0.0   0.3   0:00.28 ucs-age+
+    586 postgres  20   0  215064  20528  16432 S   0.0   0.1   0:00.08 postgres
+    591 postgres  20   0  214856  19376  15640 S   0.0   0.1   0:00.04 postgres
+    594 ucs-upd+  20   0 1241800  19568  12732 S   0.0   0.1   0:00.03 unifi-i+
+    603 postgres  20   0  214744  17416  14004 S   0.0   0.1   0:00.01 postgres
+    611 postgres  20   0  214924  18932  15192 S   0.0   0.1   0:00.01 postgres
+    614 postgres  20   0  214820  17384  13892 S   0.0   0.1   0:00.03 postgres
+    616 postgres  20   0  214468  15352  12228 S   0.0   0.1   0:00.00 postgres
+    644 postgres  20   0  217704  29468  23600 S   0.0   0.2   0:00.35 postgres
+    645 postgres  20   0  216192  20432  15524 S   0.0   0.1   0:00.07 postgres
+    646 postgres  20   0  215492  23272  18932 S   0.0   0.1   0:00.08 postgres
+    661 postgres  20   0  213916  16624  13624 S   0.0   0.1   0:00.00 postgres
+    998 postgres  20   0  216916  25296  20444 S   0.0   0.2   0:00.06 postgres
+   1012 postgres  20   0  214372  17052  14020 S   0.0   0.1   0:00.00 postgres
+   1172 postgres  20   0  215352  18764  14940 S   0.0   0.1   0:00.02 postgres
+   1260 postgres  20   0  216368  22656  18124 S   0.0   0.1   0:00.22 postgres
+   1282 root      20   0    5592   2588   2324 S   0.0   0.0   0:00.00 cron
+   1283 postgres  20   0  218352  23076  16352 S   0.0   0.1   0:00.04 postgres
+   1475 postgres  20   0  214772  17664  14080 S   0.0   0.1   0:00.02 postgres
+   1567 nginx     20   0   16316   6704   1732 S   0.0   0.0   0:00.00 nginx
+   1568 nginx     20   0   16316   6704   1732 S   0.0   0.0   0:00.00 nginx
+   1569 nginx     20   0   16316   6704   1732 S   0.0   0.0   0:00.00 nginx
+   1570 nginx     20   0   16316   6704   1732 S   0.0   0.0   0:00.00 nginx
+   1571 nginx     20   0   16316   6676   1700 S   0.0   0.0   0:00.00 nginx
+   2304 root      20   0    3700   2620   2372 S   0.0   0.0   0:00.00 bash
+   2310 root      20   0    6740   2848   2368 R   0.0   0.0   0:00.00 top
+   2311 root      20   0    1976   1144   1060 S   0.0   0.0   0:00.00 head
+   2372 root      20   0    5936   2500   2324 S   0.0   0.0   0:00.00 ping
+
+top - 01:40:13 up 6 min,  0 users,  load average: 0.16, 0.42, 0.26
+Tasks:  57 total,   1 running,  56 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.7 us,  0.5 sy,  0.0 ni, 98.8 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :  15941.5 total,  10530.9 free,   1759.2 used,   3651.5 buff/cache
+MiB Swap:   3072.0 total,   3072.0 free,      0.0 used.  13822.2 avail Mem 
+

@@ -1,0 +1,146 @@
+## system.properties
+#
+# each unifi instance requires a set of ports:
+#
+## device inform
+# unifi.http.port=8080
+## controller UI / API
+# unifi.https.port=8443
+## portal redirect port for HTTP
+# portal.http.port=8880
+## portal redirect port for HTTPs
+# portal.https.port=8843
+## local-bound port for DB server
+# unifi.db.port=27117
+## UDP port used for STUN
+# unifi.stun.port=3478
+#
+## the IP devices should be talking to for inform
+# system_ip=a.b.c.d
+## disable mongodb journaling
+# unifi.db.nojournal=false
+## extra mongod args
+# unifi.db.extraargs
+#
+## HTTPS options
+# unifi.https.ciphers=TLS_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA
+# unifi.https.sslEnabledProtocols=TLSv1,SSLv2Hello
+# unifi.https.hsts=false
+# unifi.https.hsts.max_age=31536000
+# unifi.https.hsts.preload=false
+# unifi.https.hsts.subdomain=false
+#
+# Ports reserved for device redirector. There is no need to open
+# firewall for these ports on controller, however do NOT set
+# controller to use these ports.
+#
+# portal.redirector.port=8881
+# portal.redirector.port.wired=8882
+#
+# Port used for throughput measurement.
+# unifi.throughput.port=6789
+#
+#Mon Nov 09 01:35:05 CST 2026
+debug.device=warn
+debug.mgmt=warn
+debug.sdn=warn
+debug.setting_preference=auto
+debug.system=warn
+reporter-uuid=72a08c9a-99ba-4fbe-bcb2-8e38d54b6aef
+system_ip=127.0.0.1
+ucore.caps=4
+unifi.ucore.message_box.token=313db491-894c-446d-9750-14883263f789
+uuid=205d6397-c661-48e9-b299-d140a2011f1b
+lrwxrwxrwx 1 root root   14 Sep  8 11:38 /usr/lib/unifi/data -> /var/lib/unifi
+
+/usr/lib/unifi:
+total 28
+drwxr-xr-x 6 root root 4096 Sep  8 11:38 .
+drwxr-xr-x 1 root root 4096 Nov  9 01:34 ..
+drwxr-xr-x 2 root root 4096 Sep  8 11:38 bin
+lrwxrwxrwx 1 root root   14 Sep  8 11:38 data -> /var/lib/unifi
+drwxr-xr-x 4 root root 4096 Sep  8 11:38 dl
+drwxr-xr-x 3 root root 4096 Sep  8 11:38 lib
+lrwxrwxrwx 1 root root   16 Sep  8 11:38 logs -> /data/unifi/logs
+lrwxrwxrwx 1 root root   15 Sep  8 11:38 run -> /data/unifi/run
+drwxr-xr-x 3 root root 4096 Sep  8 11:38 webapps
+## system.properties
+#
+# each unifi instance requires a set of ports:
+#
+## device inform
+# unifi.http.port=8080
+## controller UI / API
+# unifi.https.port=8443
+## portal redirect port for HTTP
+# portal.http.port=8880
+## portal redirect port for HTTPs
+# portal.https.port=8843
+## local-bound port for DB server
+# unifi.db.port=27117
+## UDP port used for STUN
+# unifi.stun.port=3478
+#
+## the IP devices should be talking to for inform
+# system_ip=a.b.c.d
+## disable mongodb journaling
+# unifi.db.nojournal=false
+## extra mongod args
+# unifi.db.extraargs
+#
+## HTTPS options
+# unifi.https.ciphers=TLS_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_CBC_SHA
+# unifi.https.sslEnabledProtocols=TLSv1,SSLv2Hello
+# unifi.https.hsts=false
+# unifi.https.hsts.max_age=31536000
+# unifi.https.hsts.preload=false
+# unifi.https.hsts.subdomain=false
+#
+# Ports reserved for device redirector. There is no need to open
+# firewall for these ports on controller, however do NOT set
+# controller to use these ports.
+#
+# portal.redirector.port=8881
+# portal.redirector.port.wired=8882
+#
+# Port used for throughput measurement.
+# unifi.throughput.port=6789
+#
+#Mon Nov 09 01:35:05 CST 2026
+debug.device=warn
+debug.mgmt=warn
+debug.sdn=warn
+debug.setting_preference=auto
+debug.system=warn
+reporter-uuid=72a08c9a-99ba-4fbe-bcb2-8e38d54b6aef
+system_ip=127.0.0.1
+ucore.caps=4
+unifi.ucore.message_box.token=313db491-894c-446d-9750-14883263f789
+uuid=205d6397-c661-48e9-b299-d140a2011f1b
+UNIFI_JVM_OPTS="-Dunifi-os.server=true -Dorg.xerial.snappy.tempdir=/usr/lib/unifi/run -XX:+UseG1GC -XX:MaxRAMPercentage=70.0 -Xss1024K -XX:-TieredCompilation"
+UNIFI_MQ_ENABLED=true
+UNIFI_MQ_CERTIFICATES_DIR="/etc/rabbitmq/ssl"
+UNIFI_PERSISTENT_DIR=/data/unifi
+UNIFI_LOG_DIR=${UNIFI_PERSISTENT_DIR}/logs
+UNIFI_RUN_DIR=${UNIFI_PERSISTENT_DIR}/run
+UNIFI_MONGODB_LOG_DIR=/data/unifi/logs
+UNIFI_MONGODB_RUN_DIR=/data/unifi/run
+# TODO: Migrate. By setting this se should be able to remove /var/lib/unifi & /var/lib/mongodb volumes.
+# UNIFI_DATA_DIR=${UNIFI_PERSISTENT_DIR}/data 
+# UNIFI_MONGODB_DATA_DIR=/data/unifi/data/db/usr/lib/unifi/bin/unifi.init:87:UNIFI_JVM_OPTS=${UNIFI_JVM_OPTS:-"-Xmx1024M -XX:+UseParallelGC"}
+/usr/lib/unifi/bin/unifi.init:100:				$UNIFI_JVM_OPTS \
+/usr/sbin/unifi-network-service-helper:222:	heap_max=$(get_unifi_property 'unifi.xmx')
+/usr/sbin/unifi-network-service-helper:229:	elif [ "${JVM_INIT_HEAP_SIZE}" != "" ]; then
+/usr/sbin/unifi-network-service-helper:230:		set_jvm_opts=$(echo ${set_jvm_opts} -Xms${JVM_INIT_HEAP_SIZE}M)
+/usr/sbin/unifi-network-service-helper:233:		set_jvm_opts=$(echo ${set_jvm_opts} -Xmx${heap_max}M)
+/usr/sbin/unifi-network-service-helper:234:	elif [ "${JVM_MAX_HEAP_SIZE}" != "" ]; then
+/usr/sbin/unifi-network-service-helper:235:		set_jvm_opts=$(echo ${set_jvm_opts} -Xmx${JVM_MAX_HEAP_SIZE}M)
+/usr/sbin/unifi-network-service-helper:237:		set_jvm_opts=$(echo ${set_jvm_opts} -Xmx1024M)
+/usr/sbin/unifi-network-service-helper:250:	if [ "${UNIFI_JVM_EXTRA_OPTS}" != "" ]; then
+/usr/sbin/unifi-network-service-helper:251:		set_jvm_opts=$(echo ${set_jvm_opts} ${UNIFI_JVM_EXTRA_OPTS})
+/usr/sbin/unifi-network-service-helper:254:	if [ "${set_jvm_opts}" != "-Xmx1024M -XX:+UseParallelGC" ]; then
+/usr/sbin/unifi-network-service-helper:256:		log "Adding UNIFI_JVM_OPTS=$set_jvm_opts to ${DATADIR}/system_env"
+/usr/sbin/unifi-network-service-helper:257:		echo UNIFI_JVM_OPTS="$set_jvm_opts" >> "${DATADIR}/system_env"
+/etc/default/unifi:1:UNIFI_JVM_OPTS="-Dunifi-os.server=true -Dorg.xerial.snappy.tempdir=/usr/lib/unifi/run -XX:+UseG1GC -XX:MaxRAMPercentage=70.0 -Xss1024K -XX:-TieredCompilation"
+/lib/systemd/system/unifi.service:18:Environment="UNIFI_CORE_ENABLED=true" "UNIFI_MONGODB_SERVICE_ENABLED=false" "UNIFI_MQ_ENABLED=false" "UNIFI_EXTERNAL_DISK_INSERTED=" "UNIFI_JVM_OPTS=-Xmx512M -XX:+UseParallelGC"
+/lib/systemd/system/unifi.service:32:    $UNIFI_JVM_OPTS \

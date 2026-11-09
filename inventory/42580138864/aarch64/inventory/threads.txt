@@ -1,0 +1,31 @@
+60
+0
+90 mongod threads=24
+204 beam.smp threads=24
+401 postgres threads=1
+403 postgres threads=1
+404 postgres threads=1
+405 postgres threads=1
+406 postgres threads=1
+407 postgres threads=1
+408 postgres threads=1
+586 postgres threads=1
+591 postgres threads=1
+603 postgres threads=1
+611 postgres threads=1
+614 postgres threads=1
+616 postgres threads=1
+644 postgres threads=1
+645 postgres threads=1
+646 postgres threads=1
+661 postgres threads=1
+998 postgres threads=1
+1012 postgres threads=1
+1103 java threads=74
+1172 postgres threads=1
+1260 postgres threads=1
+1283 postgres threads=1
+1291 postgres threads=1
+1418 mongod threads=30
+1475 postgres threads=1
+2400 bash threads=1
