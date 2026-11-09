@@ -1,0 +1,1073 @@
+
+######## env files
+UNIFI_JVM_OPTS="-Dunifi-os.server=true -Dorg.xerial.snappy.tempdir=/usr/lib/unifi/run -XX:+UseG1GC -XX:MaxRAMPercentage=70.0 -Xss1024K -XX:-TieredCompilation"
+UNIFI_MQ_ENABLED=true
+UNIFI_MQ_CERTIFICATES_DIR="/etc/rabbitmq/ssl"
+UNIFI_PERSISTENT_DIR=/data/unifi
+UNIFI_LOG_DIR=${UNIFI_PERSISTENT_DIR}/logs
+UNIFI_RUN_DIR=${UNIFI_PERSISTENT_DIR}/run
+UNIFI_MONGODB_LOG_DIR=/data/unifi/logs
+UNIFI_MONGODB_RUN_DIR=/data/unifi/run
+# TODO: Migrate. By setting this se should be able to remove /var/lib/unifi & /var/lib/mongodb volumes.
+# UNIFI_DATA_DIR=${UNIFI_PERSISTENT_DIR}/data 
+# UNIFI_MONGODB_DATA_DIR=/data/unifi/data/db---
+cat: /var/lib/unifi/env-overrides: No such file or directory
+---
+total 92
+drwxr-xr-x 1 root root 4096 Sep  8 12:33 .
+drwxr-xr-x 1 root root 4096 Nov  9 02:51 ..
+-rw-r--r-- 1 root root  175 Dec 19  2024 adoptium-ca-certificates
+-rw-r--r-- 1 root root  955 Feb 22  2021 cron
+-rw-r--r-- 1 root root  297 Jun  6  2023 dbus
+-rw-r--r-- 1 root root   81 Mar 28  2024 hwclock
+-rw-r--r-- 1 root root   35 Sep  8 12:42 locale
+-rw-r--r-- 1 root root  186 Jul 15 13:49 nginx
+-rw-r--r-- 1 root root  273 Jul 15 13:49 nginx-debug
+-rw-r--r-- 1 root root 1756 Aug 15  2024 nss
+drwxr-xr-x 2 root root 4096 Sep  8 12:08 postgresql
+-rw-r--r-- 1 root root  363 Oct  9  2019 smartmontools
+-rw-r--r-- 1 root root  550 Dec 29  2025 snmpd
+-rw-r--r-- 1 root root   59 Sep  8 12:00 syslog-ng-persist
+-rw-r--r-- 1 root root  281 Sep  8 12:33 ubnt-dpkg-cache
+-rw-r--r-- 1 root root   64 Sep  8 12:00 ubnt-dpkg-support
+-rw-r--r-- 1 root root  617 Sep  8 12:00 unifi
+-rw-r--r-- 1 root root  132 Aug 12 05:06 unifi-core
+-rw-r--r-- 1 root root   87 Sep  8 12:00 unifi-core_advanced
+-rw-r--r-- 1 root root   87 Sep  8 12:00 unifi-core_advanced.prd
+-rw-r--r-- 1 root root  105 Sep  8 12:00 unifi-core_advanced.stg
+-rw-r--r-- 1 root root 1118 Feb  7  2020 useradd
+NODE_ENV="production"
+UV_THREADPOOL_SIZE=256
+NODE_CONFIG_DIR="/usr/share/unifi-core/app/config/:/data/unifi-core/config/overrides/"
+NODE_CONFIG='{"discovery":{"discoveryClientUrl":"http://host.docker.internal:11002"}}'
+NODE_CONFIG='{"discovery":{"discoveryClientUrl":"http://host.docker.internal:11002"}}'
+NODE_CONFIG='{"discovery":{"discoveryClientUrl":"http://host.docker.internal:11002"}, "cloudEnv":"stg"}'
+
+######## helper
+/root/probe.sh: line 3: file: command not found
+4:# General parameters
+124:	for jvm in ${java_list}; do
+125:		jvm_real_java=`readlink -f /usr/lib/jvm/${jvm}/bin/java 2>/dev/null`
+126:		[ "${jvm_real_java}" != "" ] || continue
+127:		if [ "${jvm_real_java}" == "${cur_real_java}" ]; then
+135:		for jvm in ${java_list}; do
+136:			jvm_real_java=`readlink -f /usr/lib/jvm/${jvm}/bin/java 2>/dev/null`
+137:			[ "${jvm_real_java}" != "" ] || continue
+138:			if [ "${jvm_real_java}" == "${cur_real_java}" ]; then
+156:function load_jvm_opts () {
+158:	heap_max=$(get_unifi_property 'unifi.xmx')
+161:	set_jvm_opts=""
+163:		set_jvm_opts=$(echo ${set_jvm_opts} -Xms${heap_min}M)
+164:	elif [ "${JVM_INIT_HEAP_SIZE}" != "" ]; then
+165:		set_jvm_opts=$(echo ${set_jvm_opts} -Xms${JVM_INIT_HEAP_SIZE}M)
+167:		set_jvm_opts=$(echo ${set_jvm_opts} -Xmx${heap_max}M)
+168:	elif [ "${JVM_MAX_HEAP_SIZE}" != "" ]; then
+169:		set_jvm_opts=$(echo ${set_jvm_opts} -Xmx${JVM_MAX_HEAP_SIZE}M)
+171:		set_jvm_opts=$(echo ${set_jvm_opts} -Xmx1024M)
+173:		set_jvm_opts=$(echo ${set_jvm_opts} -Xss${stack_size}K)
+175:		set_jvm_opts=$(echo ${set_jvm_opts} -XX:+UseG1GC)
+177:		set_jvm_opts=$(echo ${set_jvm_opts} -XX:+UseParallelGC)
+179:		set_jvm_opts=$(echo ${set_jvm_opts} -Djava.security.egd=${JAVA_ENTROPY_GATHER_DEVICE})
+180:	if [ "${UNIFI_JVM_EXTRA_OPTS}" != "" ]; then
+181:		set_jvm_opts=$(echo ${set_jvm_opts} ${UNIFI_JVM_EXTRA_OPTS})
+182:	if [ "${set_jvm_opts}" != "-Xmx1024M -XX:+UseParallelGC" ]; then
+183:		set_jvm_opts="\""$set_jvm_opts"\""
+184:		log "Adding UNIFI_JVM_OPTS=$set_jvm_opts to ${DATADIR}/system_env"
+185:		echo UNIFI_JVM_OPTS="$set_jvm_opts" >> "${DATADIR}/system_env"
+207:		load_jvm_opts
+249:function shutdown_unifi_mongo_service_if_needed() {
+250:	if [ "${UNIFI_MONGODB_SERVICE_ENABLED}" == "true" ] && [ $(systemctl is-active --quiet unifi-mongodb && echo $?) ]; then
+251:		runningMongoDbVersion=$(mongo localhost:27117/ace --quiet --eval "db.version()")
+252:		echo "Running MongoDB version - $runningMongoDbVersion"
+253:		installedMongoDbVersion=$(dpkg-query --showformat="\${VERSION}" --show mongodb-server)
+254:		echo "Installed MongoDB version - $installedMongoDbVersion"
+255:		if [[ $installedMongoDbVersion == *"$runningMongoDbVersion"* ]]; then
+256:			echo "MongoDB version has not changed"
+258:			log "MongoDB version has changed, shutting down unifi-mongodb.service"
+259:			systemctl stop unifi-mongodb
+260:			log "Finished shutting down unifi-mongodb.service"
+276:UNIFI_MONGODB_SERVICE_ENABLED=${UNIFI_MONGODB_SERVICE_ENABLED:-false}
+301:	shutdown-unifi-mongo-if-needed)
+302:		shutdown_unifi_mongo_service_if_needed
+
+######## helper-fulltext-if-script
+#!/bin/bash
+#
+# Helper script for Ubiquiti UniFi Network
+#
+
+. "/usr/sbin/unifi-network-service-common"
+
+# General parameters
+NAME="unifi"
+BASEDIR="/usr/lib/unifi"
+ADDITIONAL_STORAGE_BASE="/srv"
+POSTGRES_ADMIN="unifi_network_admin"
+POSTGRES_PORT="5432"
+
+# Constants
+
+### Helper functions ###
+
+function is_link() {
+	[ -L "$1" ] && [ -e "$1" ]
+}
+
+function is_mountpoint() {
+	mountpoint -q "$1"
+}
+
+function is_additional_storage_available() {
+	is_mountpoint "$ADDITIONAL_STORAGE_BASE" || is_link "$ADDITIONAL_STORAGE_BASE"
+}
+
+function ensure_additional_storage_ownership() {
+	is_additional_storage_available || return 0
+	[ -d "$ADDITIONAL_STORAGE_DIR" ] || return 0
+	local expected_uid expected_gid stray
+	expected_uid=$(id -u "$USER")
+	expected_gid=$(id -g "$USER")
+	stray=$(find "$ADDITIONAL_STORAGE_DIR" \( ! -uid "$expected_uid" -o ! -gid "$expected_gid" \) -print -quit 2>/dev/null)
+	if [ -n "$stray" ]; then
+		log "Fixing ownership of $ADDITIONAL_STORAGE_DIR ($stray not owned by $USER)"
+		chown -R "$USER:$GROUP" "$ADDITIONAL_STORAGE_DIR"
+	fi
+}
+
+function create_additional_storage_dir() {
+	if is_additional_storage_available && [ ! -d "$ADDITIONAL_STORAGE_DIR" ]; then
+		mkdir "$ADDITIONAL_STORAGE_DIR"
+		chown "$USER:$GROUP" "$ADDITIONAL_STORAGE_DIR"
+	fi
+	ensure_additional_storage_ownership
+}
+
+function mount_tmpfs_dir() {
+	if does_not_have_ubnt_tools ; then
+		return 0
+	fi
+	# Support directories
+	mkdir -p "$TMPFS_DIR"
+	chown -R "$USER:$GROUP" "$TMPFS_DIR"
+
+	# Mount temp filesystem
+	mount -t tmpfs -o size=$TMPFS_SIZE tmpfs $TMPFS_DIR || log "Warning: Could not mount tmpfs to $TMPFS_DIR"
+}
+
+function unmount_tmpfs_dir() {
+	if does_not_have_ubnt_tools ; then
+		return 0
+	fi
+	log "tmpfs: $TMPFS_DIR"
+	if is_mountpoint "$TMPFS_DIR"; then
+		umount "$TMPFS_DIR" || log "Warning: Could not unmount tmpfs from $TMPFS_DIR"
+	fi
+}
+
+function create_dirs() {
+	log "user: $USER, group: $GROUP"
+	log "data: $DATADIR, logs: $LOGDIR, run: $RUNDIR, additional storage: $ADDITIONAL_STORAGE_DIR"
+	log "tmpfs: $TMPFS_DIR, size: $TMPFS_SIZE"
+	link_to_persistent "${DATADIR}" "${BASEDIR}"/data
+	link_to_persistent "${LOGDIR}"  "${BASEDIR}"/logs
+	link_to_persistent "${RUNDIR}"  "${BASEDIR}"/run
+	create_additional_storage_dir
+	mount_tmpfs_dir
+
+	check_dir_permissions || log "Warning: Wrong permissions for ${DATADIR}, ${LOGDIR}, ${RUNDIR}"
+
+	return 0
+}
+
+function check_dir_permissions() {
+	local unifi_uid=$(id -u "${USER}")
+
+	local datadir_uid=$(stat ${DATADIR} -Lc %u)
+	local logdir_uid=$( stat ${LOGDIR}  -Lc %u)
+	local rundir_uid=$( stat ${RUNDIR}  -Lc %u)
+
+	[ "${unifi_uid}" == "${datadir_uid}" ] && \
+	[ "${unifi_uid}" == "${logdir_uid}"  ] && \
+	[ "${unifi_uid}" == "${logdir_uid}"  ] && \
+	\
+	sudo -u "${USER}" test -w "${DATADIR}" && \
+	sudo -u "${USER}" test -w "${LOGDIR}"  && \
+	sudo -u "${USER}" test -w "${RUNDIR}"  && \
+	\
+		return 0;
+
+	return 1;
+}
+
+function link_to_persistent() {
+	local persistent_dir="${1}"
+	local orig_dir="${2}"
+	install -o "${USER}" -dD "${persistent_dir}"
+	chown -R "${USER}": "${persistent_dir}"
+	if ! [ -L "${orig_dir}" -a "${persistent_dir}" -ef  "${orig_dir}" ]; then
+		rm -rf "${orig_dir}"
+		ln -sf "${persistent_dir}" "${orig_dir}"
+	fi
+}
+
+function get_java_version () {
+	java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1
+}
+
+function set_java_version () {
+	sudo update-alternatives --set java $1
+}
+
+function log_unsupported_java_version() {
+	log "Warning: Could not find alternative/supported Java version. Make sure '/usr/bin/java' points to supported version - Java [${SUPPORTED_JAVA_VERSIONS[*]}]"
+}
+
+function set_java_home () {
+	for supported_version in "${SUPPORTED_JAVA_VERSIONS[@]}"; do
+		if set_java_home_version "$supported_version"; then
+			return 0
+		fi
+	done
+	log_unsupported_java_version
+}
+function set_java_home_version() {
+	supported_java_version=$1
+	log "Attempting to set Java home to supported version - $supported_java_version"
+	arch=`dpkg --print-architecture 2>/dev/null`
+	if [ ! "$arch" ]; then
+		arch=`uname -m`
+		if [ "$arch" = aarch64 ]; then
+			arch=arm64
+		fi
+	fi
+	java_list=''
+	java_list=`echo ${java_list} java-${supported_java_version}-openjdk-${arch}`
+	java_list=`echo ${java_list} java-${supported_java_version}-openjdk`
+	java_list=`echo ${java_list} temurin-${supported_java_version}-jre-${arch}`
+	java_list=`echo ${java_list} temurin-${supported_java_version}-jre`
+
+	for a in i386 amd64 armhf arm64; do
+		java_list=$(echo ${java_list} oracle-java${supported_java_version}-jdk-${a}/jre)
+	done
+	for a in i386 amd64; do
+		java_list=$(echo ${java_list} oracle-java${supported_java_version}-jre-${a})
+	done
+	for a in x64 i586 arm32-vfp-hflt arm64-vfp-hflt; do
+		java_list=$(echo ${java_list} jdk-${supported_java_version}-oracle-${a}/jre)
+	done
+	for a in x64 i586; do
+		java_list=$(echo ${java_list} jre-${supported_java_version}-oracle-${a})
+	done
+	for a in i386 amd64 armhf arm64; do
+		java_list=$(echo ${java_list} adoptopenjdk-${supported_java_version}-hotspot-${a})
+	done
+
+	java_list=$(echo ${java_list} java-${supported_java_version}-oracle/jre)
+
+	cur_java=`update-alternatives --query java 2>/dev/null | awk '/^Value: /{print $2}'`
+	cur_real_java=`readlink -f ${cur_java} 2>/dev/null`
+	for jvm in ${java_list}; do
+		jvm_real_java=`readlink -f /usr/lib/jvm/${jvm}/bin/java 2>/dev/null`
+		[ "${jvm_real_java}" != "" ] || continue
+		if [ "${jvm_real_java}" == "${cur_real_java}" ]; then
+			set_java_version $cur_java
+			return 0
+		fi
+	done
+
+	alts_java=`update-alternatives --query java 2>/dev/null | awk '/^Alternative: /{print $2}'`
+	for cur_java in ${alts_java}; do
+		cur_real_java=`readlink -f ${cur_java} 2>/dev/null`
+		for jvm in ${java_list}; do
+			jvm_real_java=`readlink -f /usr/lib/jvm/${jvm}/bin/java 2>/dev/null`
+			[ "${jvm_real_java}" != "" ] || continue
+			if [ "${jvm_real_java}" == "${cur_real_java}" ]; then
+				set_java_version $cur_java
+				return 0
+			fi
+		done
+	done
+	return 1
+}
+
+function get_unifi_property () {
+	if [ -f ${DATADIR}/system.properties ]; then
+		property_name=$1
+		cut -d "=" -f2 <<< $(grep "^[^#;]" ${DATADIR}/system.properties | grep $property_name) | cut -d ' ' -f1
+	fi
+}
+
+function get_environment_property () {
+	if [ -f /etc/default/${NAME} ]; then
+		property_name=$1
+		cut -d "=" -f2 <<< $(grep "^[^#;]" "/etc/default/${NAME}" | grep $property_name)
+	fi
+}
+
+function get_model_shortname () {
+	if [ -f /sbin/ubnt-tools ]; then
+		cut -d "=" -f2 <<< $(sudo /sbin/ubnt-tools id | grep "board.shortname")
+	fi
+}
+
+function load_jvm_opts () {
+	heap_min=$(get_unifi_property 'unifi.xms')
+	heap_max=$(get_unifi_property 'unifi.xmx')
+	stack_size=$(get_unifi_property 'unifi.xss')
+	g1gc_enabled=$(get_unifi_property 'unifi.G1GC.enabled')
+
+	set_jvm_opts=""
+	if [ "${heap_min}" != "" ]; then
+		set_jvm_opts=$(echo ${set_jvm_opts} -Xms${heap_min}M)
+	elif [ "${JVM_INIT_HEAP_SIZE}" != "" ]; then
+		set_jvm_opts=$(echo ${set_jvm_opts} -Xms${JVM_INIT_HEAP_SIZE}M)
+	fi
+	if [ "${heap_max}" != "" ]; then
+		set_jvm_opts=$(echo ${set_jvm_opts} -Xmx${heap_max}M)
+	elif [ "${JVM_MAX_HEAP_SIZE}" != "" ]; then
+		set_jvm_opts=$(echo ${set_jvm_opts} -Xmx${JVM_MAX_HEAP_SIZE}M)
+	else
+		set_jvm_opts=$(echo ${set_jvm_opts} -Xmx1024M)
+	fi
+	if [ "${stack_size}" != "" ]; then
+		set_jvm_opts=$(echo ${set_jvm_opts} -Xss${stack_size}K)
+	fi
+	if [[ "${g1gc_enabled}" != "" && $g1gc_enabled ]]; then
+		set_jvm_opts=$(echo ${set_jvm_opts} -XX:+UseG1GC)
+	else
+		set_jvm_opts=$(echo ${set_jvm_opts} -XX:+UseParallelGC)
+	fi
+	if [ "${JAVA_ENTROPY_GATHER_DEVICE}" != "" ]; then
+		set_jvm_opts=$(echo ${set_jvm_opts} -Djava.security.egd=${JAVA_ENTROPY_GATHER_DEVICE})
+	fi
+	if [ "${UNIFI_JVM_EXTRA_OPTS}" != "" ]; then
+		set_jvm_opts=$(echo ${set_jvm_opts} ${UNIFI_JVM_EXTRA_OPTS})
+	fi
+
+	if [ "${set_jvm_opts}" != "-Xmx1024M -XX:+UseParallelGC" ]; then
+		set_jvm_opts="\""$set_jvm_opts"\""
+		log "Adding UNIFI_JVM_OPTS=$set_jvm_opts to ${DATADIR}/system_env"
+		echo UNIFI_JVM_OPTS="$set_jvm_opts" >> "${DATADIR}/system_env"
+	fi
+}
+
+function supported_java_version_set() {
+	current_java_version=$(get_java_version)
+	for supported_version in "${SUPPORTED_JAVA_VERSIONS[@]}"; do
+		if [[ "java-${current_java_version}" == "java-${supported_version}" ]]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
+function set_java_home_if_needed() {
+	supported_java_version_set || set_java_home
+}
+
+function create_postgres_network_admin_if_need() {
+  log "Try to create postgres user '$POSTGRES_ADMIN' to be sure that it exists"
+  sudo -u postgres createuser $POSTGRES_ADMIN -p $POSTGRES_PORT -d > /dev/null 2>&1 || true
+}
+
+function create_system_env_file() {
+	[ -f "${DATADIR}/system_env" ] && echo -n > "${DATADIR}/system_env" || touch "${DATADIR}/system_env"
+}
+
+function remove_system_env_file_if_exists() {
+	[ -f "${DATADIR}/system_env" ] && rm "${DATADIR}/system_env"
+}
+
+function load_environment () {
+	remove_system_env_file_if_exists
+	if does_not_have_ubnt_tools ; then
+		create_system_env_file
+		load_jvm_opts
+	else
+		log "Skipping load-environment..."
+	fi
+}
+
+function dir_symlink_fix () {
+	local DSTDIR=$1
+	local SYMLINK=$2
+	local MYUSER=$3
+	local MYGROUP=$4
+	local MYMODE=$5
+
+	[ -d ${DSTDIR} ] || install -o ${MYUSER} -g ${MYGROUP} -m ${MYMODE} -d ${DSTDIR}
+	[ -d ${SYMLINK} -a ! -L ${SYMLINK} ] && mv ${SYMLINK} `mktemp -u ${SYMLINK}.XXXXXXXX`
+	[ "$(readlink ${SYMLINK})" = "${DSTDIR}" ] || (rm -f ${SYMLINK} && ln -sf ${DSTDIR} ${SYMLINK})
+}
+
+function file_symlink_fix () {
+	local DSTFILE=$1
+	local SYMLINK=$2
+
+	if [ -f ${DSTFILE} ]; then
+		[ -f ${SYMLINK} -a ! -L ${SYMLINK} ] && mv ${SYMLINK} `mktemp -u ${SYMLINK}.XXXXXXXX`
+		[ "$(readlink ${SYMLINK})" = "${DSTFILE}" ] || (rm -f ${SYMLINK} && ln -sf ${DSTFILE} ${SYMLINK})
+	fi
+}
+
+function nested_symlinks_fix () {
+	# Fix issue with nested symbolic links
+	[ -L "${BASEDIR}"/data/data ] && rm "${BASEDIR}"/data/data
+	[ -L "${BASEDIR}"/logs/logs ] && rm "${BASEDIR}"/logs/logs
+	[ -L "${BASEDIR}"/run/run ] && rm "${BASEDIR}"/run/run
+	[ -L "${BASEDIR}"/data/unifi ] && rm "${BASEDIR}"/data/unifi
+	[ -L "${BASEDIR}"/logs/unifi ] && rm "${BASEDIR}"/logs/unifi
+	[ -L "${BASEDIR}"/run/unifi ] && rm "${BASEDIR}"/run/unifi
+}
+
+function init () {
+	local UMASK=027
+	umask ${UMASK}
+	local DIR_MODE=$(printf '%x' $((0x7777 - 0x${UMASK} & 0x0777)))
+
+	nested_symlinks_fix
+	dir_symlink_fix ${DATADIR} "${BASEDIR}"/data ${USER} ${GROUP} ${DIR_MODE}
+	dir_symlink_fix ${LOGDIR} "${BASEDIR}"/logs ${USER} ${GROUP} ${DIR_MODE}
+	dir_symlink_fix ${RUNDIR} "${BASEDIR}"/run ${USER} ${GROUP} ${DIR_MODE}
+	[ -z "${UNIFI_SSL_KEYSTORE}" ] || file_symlink_fix ${UNIFI_SSL_KEYSTORE} "${BASEDIR}"/data/keystore
+	[ supported_java_version_set ] || log_unsupported_java_version
+	load_environment
+}
+
+function init_uos () {
+	nested_symlinks_fix
+	create_dirs
+	set_java_home_if_needed
+	load_environment
+}
+
+function shutdown_unifi_mongo_service_if_needed() {
+	if [ "${UNIFI_MONGODB_SERVICE_ENABLED}" == "true" ] && [ $(systemctl is-active --quiet unifi-mongodb && echo $?) ]; then
+		runningMongoDbVersion=$(mongo localhost:27117/ace --quiet --eval "db.version()")
+		echo "Running MongoDB version - $runningMongoDbVersion"
+		installedMongoDbVersion=$(dpkg-query --showformat="\${VERSION}" --show mongodb-server)
+		echo "Installed MongoDB version - $installedMongoDbVersion"
+		if [[ $installedMongoDbVersion == *"$runningMongoDbVersion"* ]]; then
+			echo "MongoDB version has not changed"
+		else
+			log "MongoDB version has changed, shutting down unifi-mongodb.service"
+			systemctl stop unifi-mongodb
+			log "Finished shutting down unifi-mongodb.service"
+		fi
+	fi
+}
+
+### Helper functions end ###
+
+# Load variables
+[ -f "/etc/default/${NAME}" ] && . "/etc/default/${NAME}"
+
+USER=${UNIFI_USER:-unifi}
+UNIFI_GROUP=$(id -gn ${USER})
+GROUP=${UNIFI_GROUP:-unifi}
+DATADIR=${UNIFI_DATA_DIR:-/var/lib/${NAME}}
+LOGDIR=${UNIFI_LOG_DIR:-/var/log/${NAME}}
+RUNDIR=${UNIFI_RUN_DIR:-/var/run/${NAME}}
+ADDITIONAL_STORAGE_DIR=${UNIFI_ADDITIONAL_STORAGE_DIR:-$ADDITIONAL_STORAGE_BASE/$NAME}
+TMPFS_DIR=${UNIFI_TMPFS_DIR:-/var/opt/$NAME/tmp}
+TMPFS_SIZE=${UNIFI_TMPFS_SIZE:-64m}
+MODEL_SHORTNAME=$(get_model_shortname)
+UNIFI_CORE_ENABLED=${UNIFI_CORE_ENABLED:-"false"}
+UNIFI_MONGODB_SERVICE_ENABLED=${UNIFI_MONGODB_SERVICE_ENABLED:-false}
+SUPPORTED_JAVA_VERSIONS=("25")
+
+case "$1" in
+	init)
+		if [[ "${UNIFI_CORE_ENABLED}" != "true" ]]; then
+			init
+			log "init complete..."
+		else
+			log "Skipping init..."
+		fi
+	;;
+	init-uos)
+		if [[ "${UNIFI_CORE_ENABLED}" == "true" ]]; then
+			init_uos
+			log "init-uos complete..."
+		else
+			log "Skipping init-uos..."
+		fi
+	;;
+	create-dirs)
+		create_dirs
+	;;
+	cleanup)
+		unmount_tmpfs_dir
+	;;
+	set-java-home)
+		set_java_home_if_needed
+	;;
+	load-environment)
+		load_environment
+	;;
+	shutdown-unifi-mongo-if-needed)
+		shutdown_unifi_mongo_service_if_needed
+	;;
+	service-started)
+		log_unifi_service_cpu_time
+	;;
+  create-postgres-network-admin-if-need)
+    create_postgres_network_admin_if_need
+	;;
+	*)
+		log "Usage: $0 {init|init-uos|create-dirs|healthcheck|cleanup|set-java-home|load-environment|create-postgres-network-admin-if-need}"
+		exit 1
+	;;
+esac
+
+exit 0
+
+######## grep env-overrides
+
+######## grep MaxRAMPercentage
+/usr/share/unifi-core/app/service.js
+
+######## listening
+State  Recv-Q Send-Q      Local Address:Port  Peer Address:PortProcess                                   
+LISTEN 0      511               0.0.0.0:80         0.0.0.0:*    users:(("nginx",pid=120,fd=8))           
+LISTEN 0      511               0.0.0.0:443        0.0.0.0:*    users:(("nginx",pid=120,fd=10))          
+LISTEN 0      4096            127.0.0.1:13080      0.0.0.0:*                                             
+LISTEN 0      4096            127.0.0.1:4369       0.0.0.0:*    users:(("systemd",pid=1,fd=64))          
+LISTEN 0      128             127.0.0.1:5672       0.0.0.0:*                                             
+LISTEN 0      4096            127.0.0.1:6080       0.0.0.0:*                                             
+LISTEN 0      244             127.0.0.1:5432       0.0.0.0:*                                             
+LISTEN 0      511               0.0.0.0:11084      0.0.0.0:*    users:(("nginx",pid=120,fd=12))          
+LISTEN 0      4096            127.0.0.1:11002      0.0.0.0:*    users:(("uos-discovery-c",pid=100,fd=12))
+LISTEN 0      4096            127.0.0.1:11010      0.0.0.0:*    users:(("uos-agent",pid=98,fd=16))       
+LISTEN 0      4096            127.0.0.1:11011      0.0.0.0:*    users:(("uos-agent",pid=98,fd=17))       
+LISTEN 0      511             127.0.0.1:11051      0.0.0.0:*    users:(("unifi-core",pid=714,fd=194))    
+LISTEN 0      511             127.0.0.1:11081      0.0.0.0:*    users:(("unifi-core",pid=714,fd=187))    
+LISTEN 0      4096            127.0.0.1:27017      0.0.0.0:*                                             
+LISTEN 0      4096            127.0.0.1:27117      0.0.0.0:*                                             
+LISTEN 0      4096            127.0.0.1:9080       0.0.0.0:*                                             
+LISTEN 0      4096            127.0.0.1:9081       0.0.0.0:*                                             
+LISTEN 0      128             127.0.0.1:25672      0.0.0.0:*                                             
+LISTEN 0      4096            127.0.0.1:9680       0.0.0.0:*                                             
+LISTEN 0      4096                    *:9443             *:*                                             
+LISTEN 0      244                 [::1]:5432          [::]:*                                             
+LISTEN 0      1000                    *:8443             *:*                                             
+LISTEN 0      511                  [::]:80            [::]:*    users:(("nginx",pid=120,fd=9))           
+LISTEN 0      511                  [::]:443           [::]:*    users:(("nginx",pid=120,fd=11))          
+LISTEN 0      1000   [::ffff:127.0.0.1]:8081             *:*                                             
+LISTEN 0      1000                    *:8880             *:*                                             
+LISTEN 0      1000                    *:8843             *:*                                             
+LISTEN 0      1000                    *:28082            *:*                                             
+LISTEN 0      511                  [::]:11084         [::]:*    users:(("nginx",pid=120,fd=26))          
+LISTEN 0      128                     *:5671             *:*                                             
+LISTEN 0      200                     *:8080             *:*                                             
+LISTEN 0      4096                    *:6443             *:*                                             
+LISTEN 0      50                      *:6789             *:*                                             
+
+######## established
+0      0                127.0.0.1:11010            127.0.0.1:44188 users:(("uos-agent",pid=98,fd=18))   
+0      0                127.0.0.1:11051            127.0.0.1:56646 users:(("unifi-core",pid=714,fd=197))
+0      0                127.0.0.1:11081            127.0.0.1:36092 users:(("unifi-core",pid=714,fd=184))
+0      0                127.0.0.1:11081            127.0.0.1:47432 users:(("unifi-core",pid=714,fd=199))
+0      0                127.0.0.1:11081            127.0.0.1:48908 users:(("unifi-core",pid=714,fd=200))
+0      0                127.0.0.1:11081            127.0.0.1:48912 users:(("unifi-core",pid=714,fd=204))
+0      0                127.0.0.1:11081            127.0.0.1:48932 users:(("unifi-core",pid=714,fd=205))
+0      0                127.0.0.1:11081            127.0.0.1:51118 users:(("unifi-core",pid=714,fd=208))
+0      0                127.0.0.1:11081            127.0.0.1:51128 users:(("unifi-core",pid=714,fd=186))
+0      0                127.0.0.1:11081            127.0.0.1:51156 users:(("unifi-core",pid=714,fd=203))
+0      0                127.0.0.1:11081            127.0.0.1:51174 users:(("unifi-core",pid=714,fd=210))
+0      0                127.0.0.1:27117            127.0.0.1:34924                                      
+0      0                127.0.0.1:27117            127.0.0.1:34928                                      
+0      0                127.0.0.1:27117            127.0.0.1:34930                                      
+0      0                127.0.0.1:27117            127.0.0.1:34940                                      
+0      0                127.0.0.1:27117            127.0.0.1:34942                                      
+0      0                127.0.0.1:27117            127.0.0.1:34950                                      
+0      0                127.0.0.1:34586            127.0.0.1:8081                                       
+0      0                127.0.0.1:40842            127.0.0.1:9080                                       
+0      0                127.0.0.1:4369             127.0.0.1:55906                                      
+0      0                127.0.0.1:44786            127.0.0.1:9680                                       
+0      0                127.0.0.1:48908            127.0.0.1:11081                                      
+0      0                127.0.0.1:48912            127.0.0.1:11081                                      
+0      0                127.0.0.1:48932            127.0.0.1:11081                                      
+0      0                127.0.0.1:51118            127.0.0.1:11081                                      
+0      0                127.0.0.1:51128            127.0.0.1:11081                                      
+0      0                127.0.0.1:51156            127.0.0.1:11081                                      
+0      0                127.0.0.1:51174            127.0.0.1:11081                                      
+0      0                127.0.0.1:53442            127.0.0.1:9080                                       
+0      0                127.0.0.1:53452            127.0.0.1:9080                                       
+0      0                127.0.0.1:53464            127.0.0.1:9080                                       
+0      0                127.0.0.1:53466            127.0.0.1:9080                                       
+0      0                127.0.0.1:53478            127.0.0.1:9080                                       
+0      0                127.0.0.1:53492            127.0.0.1:9080                                       
+0      0                127.0.0.1:53498            127.0.0.1:9080                                       
+0      0                127.0.0.1:53510            127.0.0.1:9080                                       
+0      0                127.0.0.1:53516            127.0.0.1:9080                                       
+0      0                127.0.0.1:53528            127.0.0.1:9080                                       
+0      0                127.0.0.1:53552            127.0.0.1:9080                                       
+0      0                127.0.0.1:53562            127.0.0.1:9080                                       
+0      0                127.0.0.1:53564            127.0.0.1:9080                                       
+0      0                127.0.0.1:54174            127.0.0.1:9080                                       
+0      0                127.0.0.1:5432             127.0.0.1:55604                                      
+0      0                127.0.0.1:5432             127.0.0.1:55620                                      
+0      0                127.0.0.1:55604            127.0.0.1:5432  users:(("unifi-core",pid=714,fd=21)) 
+0      0                127.0.0.1:55620            127.0.0.1:5432  users:(("unifi-core",pid=714,fd=193))
+0      0                127.0.0.1:55906            127.0.0.1:4369                                       
+0      0                127.0.0.1:5672             127.0.0.1:47952                                      
+0      0                127.0.0.1:60514            127.0.0.1:9080                                       
+0      0                127.0.0.1:60520            127.0.0.1:9080                                       
+0      0                127.0.0.1:9080             127.0.0.1:40842                                      
+0      0                127.0.0.1:9080             127.0.0.1:42806                                      
+0      0                127.0.0.1:9080             127.0.0.1:53442                                      
+0      0                127.0.0.1:9080             127.0.0.1:53452                                      
+0      0                127.0.0.1:9080             127.0.0.1:53464                                      
+0      0                127.0.0.1:9080             127.0.0.1:53466                                      
+0      0                127.0.0.1:9080             127.0.0.1:53478                                      
+0      0                127.0.0.1:9080             127.0.0.1:53492                                      
+0      0                127.0.0.1:9080             127.0.0.1:53498                                      
+0      0                127.0.0.1:9080             127.0.0.1:53510                                      
+0      0                127.0.0.1:9080             127.0.0.1:53516                                      
+0      0                127.0.0.1:9080             127.0.0.1:53528                                      
+0      0                127.0.0.1:9080             127.0.0.1:53552                                      
+0      0                127.0.0.1:9080             127.0.0.1:53562                                      
+0      0                127.0.0.1:9080             127.0.0.1:53564                                      
+0      0                127.0.0.1:9080             127.0.0.1:54174                                      
+0      0                127.0.0.1:9080             127.0.0.1:60514                                      
+0      0                127.0.0.1:9080             127.0.0.1:60520                                      
+0      0                127.0.0.1:9680             127.0.0.1:44786                                      
+0      0               172.17.0.2:35494          34.160.81.0:443                                        
+0      0               172.17.0.2:37764          3.170.19.43:443                                        
+0      0               172.17.0.2:45044          3.170.19.43:443                                        
+0      0               172.17.0.2:48290         13.35.78.115:443                                        
+0      0               172.17.0.2:52560         3.161.188.38:443                                        
+0      0               172.17.0.2:53420          3.170.19.37:443                                        
+0      0       [::ffff:127.0.0.1]:34924   [::ffff:127.0.0.1]:27117                                      
+0      0       [::ffff:127.0.0.1]:34928   [::ffff:127.0.0.1]:27117                                      
+0      0       [::ffff:127.0.0.1]:34930   [::ffff:127.0.0.1]:27117                                      
+0      0       [::ffff:127.0.0.1]:34940   [::ffff:127.0.0.1]:27117                                      
+0      0       [::ffff:127.0.0.1]:34942   [::ffff:127.0.0.1]:27117                                      
+
+######## mongo27017
+{
+	"databases" : [
+		{
+			"name" : "admin",
+			"sizeOnDisk" : 32768,
+			"empty" : false
+		},
+		{
+			"name" : "config",
+			"sizeOnDisk" : 12288,
+			"empty" : false
+		},
+		{
+			"name" : "local",
+			"sizeOnDisk" : 32768,
+			"empty" : false
+		}
+	],
+	"totalSize" : 77824,
+	"ok" : 1
+}
+{ "current" : 1, "available" : 51199, "totalCreated" : 1 }
+[
+	[
+		"127.0.0.1:36240",
+		"MongoDB Shell",
+		"conn1"
+	],
+	[
+		undefined,
+		undefined,
+		"SessionKiller"
+	],
+	[
+		undefined,
+		undefined,
+		"clientcursormon"
+	],
+	[
+		undefined,
+		undefined,
+		"LogicalSessionCacheReap"
+	],
+	[
+		undefined,
+		undefined,
+		"TTLMonitor"
+	],
+	[
+		undefined,
+		undefined,
+		"ftdc"
+	],
+	[
+		undefined,
+		undefined,
+		"WTIdleSessionSweeper"
+	],
+	[
+		undefined,
+		undefined,
+		"WTCheckpointThread"
+	],
+	[
+		undefined,
+		undefined,
+		"WTJournalFlusher"
+	],
+	[
+		undefined,
+		undefined,
+		"LogicalSessionCacheRefresh"
+	],
+	[
+		undefined,
+		undefined,
+		"initandlisten"
+	]
+]
+
+######## mongo27117
+{
+	"databases" : [
+		{
+			"name" : "ace",
+			"sizeOnDisk" : 2019328,
+			"empty" : false
+		},
+		{
+			"name" : "ace_audit",
+			"sizeOnDisk" : 16384,
+			"empty" : false
+		},
+		{
+			"name" : "ace_stat",
+			"sizeOnDisk" : 172032,
+			"empty" : false
+		},
+		{
+			"name" : "admin",
+			"sizeOnDisk" : 32768,
+			"empty" : false
+		},
+		{
+			"name" : "config",
+			"sizeOnDisk" : 12288,
+			"empty" : false
+		},
+		{
+			"name" : "local",
+			"sizeOnDisk" : 32768,
+			"empty" : false
+		}
+	],
+	"totalSize" : 2285568,
+	"ok" : 1
+}
+{ "current" : 7, "available" : 52421, "totalCreated" : 7 }
+268435456 1505574
+
+######## unifi-mongodb unit
+● mongodb.service - An object/document-oriented database
+     Loaded: loaded (/lib/systemd/system/mongodb.service; enabled; vendor preset: enabled)
+     Active: active (running) since Mon 2026-11-09 02:51:37 EST; 1min 32s ago
+       Docs: man:mongod(1)
+   Main PID: 90 (mongod)
+/lib/systemd/system/unifi.service:27:    -Dunifi.mongodb.service.enabled=${UNIFI_MONGODB_SERVICE_ENABLED} \
+
+######## ls unifi bin
+total 16
+drwxr-xr-x 2 root root 4096 Sep  8 12:43 .
+drwxr-xr-x 6 root root 4096 Sep  8 12:43 ..
+lrwxrwxrwx 1 root root   15 Sep  8 12:43 mongod -> /usr/bin/mongod
+-rwxr-xr-x 1 root root 4805 Jul 23 12:00 unifi.init
+/usr/bin/mongod
+
+######## journald
+ls: cannot access '/var/log/journal': No such file or directory
+/run/log/journal:
+total 0
+drwxr-sr-x+ 3 root systemd-journal 60 Nov  9 02:51 .
+drwxr-xr-x  3 root root            60 Nov  9 02:51 ..
+drwxr-s---+ 2 root systemd-journal 60 Nov  9 02:51 180b4443dc634ac3b44f82765b154606
+File path: /run/log/journal/180b4443dc634ac3b44f82765b154606/system.journal
+[Journal]
+ls: cannot access '/etc/systemd/journald.conf.d': No such file or directory
+
+######## rabbit conf
+== /etc/rabbitmq/conf.d/10-unifi-common.conf
+default_user = ui
+default_pass = ui
+
+# Allow only local connections.
+loopback_users.ui = true
+
+vm_memory_high_watermark.relative = 0.25
+
+load_definitions = /usr/share/rabbitmq/defs.json
+
+# TCP listener is available only on localhost for Network BE and gateway running on same host (EDF).
+listeners.tcp.1 = 127.0.0.1:5672
+
+# Bind port 25672 (inter-node communication) to localhost.
+distribution.listener.interface = 127.0.0.1
+== /etc/rabbitmq/conf.d/10-unifi.conf
+default_user = ui
+default_pass = ui
+loopback_users.ui = none
+# TCP listener is available only on localhost for Network BE and gateway running on same host (EDF).
+listeners.tcp.1 = 127.0.0.1:5672== /etc/rabbitmq/conf.d/20-unifi-remote.conf
+ # SSL listener is available for external clients (UXGs).
+listeners.ssl.default = 5671
+ssl_options.cacertfile           = /etc/rabbitmq/ssl/root.cert
+ssl_options.certfile             = /etc/rabbitmq/ssl/server.cert
+ssl_options.keyfile              = /etc/rabbitmq/ssl/server.key
+ssl_options.verify               = verify_peer
+ssl_options.fail_if_no_peer_cert = truecat: /etc/rabbitmq/enabled_plugins: No such file or directory
+/usr/lib/erlang/erts-15.2.7.9/bin/beam.smp -W w -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -pc unicode -P 1048576 -t 5000000 -stbt db -zdbbl 128000 -sbwt none -sbwtdcpu none -sbwtdio none -- -root /usr/lib/erlang -bindir /usr/lib/erlang/erts-15.2.7.9/bin -progname erl -- -home /home/rabbitmq -- -pa  -noshell -noinput -s rabbit boot -boot start_sasl -syslog logger [] -syslog syslog_error_logger false -kernel prevent_overlapping_partitions false -- 
+######## gc log
+[2026-11-09T07:51:54.382+0000] GC(20) Concurrent Mark Cycle
+[2026-11-09T07:51:54.452+0000] GC(20) Pause Remark 48M->48M(128M) 2.169ms
+[2026-11-09T07:51:54.465+0000] GC(20) Pause Cleanup 51M->51M(128M) 0.021ms
+[2026-11-09T07:51:54.466+0000] GC(20) Concurrent Mark Cycle 83.434ms
+[2026-11-09T07:51:54.725+0000] GC(21) Pause Young (Prepare Mixed) (G1 Evacuation Pause) 92M->38M(128M) 5.811ms
+[2026-11-09T07:51:54.864+0000] GC(22) Pause Young (Mixed) (G1 Evacuation Pause) 94M->39M(128M) 7.347ms
+[2026-11-09T07:51:54.932+0000] GC(23) Pause Young (Normal) (G1 Evacuation Pause) 95M->40M(160M) 6.673ms
+[2026-11-09T07:51:55.094+0000] GC(24) Pause Young (Normal) (G1 Evacuation Pause) 128M->41M(160M) 6.558ms
+[2026-11-09T07:51:55.546+0000] GC(25) Pause Young (Normal) (G1 Evacuation Pause) 121M->42M(160M) 8.428ms
+[2026-11-09T07:51:57.505+0000] GC(26) Pause Young (Normal) (G1 Evacuation Pause) 130M->46M(160M) 7.884ms
+[2026-11-09T07:51:57.797+0000] GC(27) Pause Young (Normal) (G1 Evacuation Pause) 126M->48M(160M) 8.448ms
+[2026-11-09T07:51:58.325+0000] GC(28) Pause Young (Normal) (G1 Evacuation Pause) 128M->52M(240M) 7.544ms
+[2026-11-09T07:51:59.163+0000] GC(29) Pause Young (Normal) (G1 Evacuation Pause) 180M->58M(240M) 9.831ms
+[2026-11-09T07:51:59.875+0000] GC(30) Pause Young (Normal) (G1 Evacuation Pause) 178M->66M(240M) 12.605ms
+[2026-11-09T07:52:01.385+0000] GC(31) Pause Young (Normal) (G1 Evacuation Pause) 186M->72M(240M) 14.632ms
+[2026-11-09T07:52:02.067+0000] GC(32) Pause Young (Concurrent Start) (Metadata GC Threshold) 186M->78M(240M) 13.227ms
+[2026-11-09T07:52:02.067+0000] GC(33) Concurrent Mark Cycle
+[2026-11-09T07:52:02.153+0000] GC(33) Pause Remark 91M->91M(240M) 4.782ms
+[2026-11-09T07:52:02.177+0000] GC(33) Pause Cleanup 96M->96M(240M) 0.017ms
+[2026-11-09T07:52:02.178+0000] GC(33) Concurrent Mark Cycle 111.161ms
+[2026-11-09T07:52:02.693+0000] GC(34) Pause Young (Prepare Mixed) (G1 Evacuation Pause) 206M->87M(240M) 11.918ms
+[2026-11-09T07:52:03.488+0000] GC(35) Pause Young (Mixed) (G1 Evacuation Pause) 215M->97M(312M) 20.506ms
+[2026-11-09T07:52:04.270+0000] GC(36) Pause Young (Normal) (G1 Evacuation Pause) 257M->107M(312M) 17.121ms
+[2026-11-09T07:52:05.268+0000] GC(37) Pause Young (Normal) (G1 Evacuation Pause) 267M->115M(312M) 22.023ms
+[2026-11-09T07:52:06.219+0000] GC(38) Pause Young (Concurrent Start) (G1 Evacuation Pause) 267M->121M(312M) 14.708ms
+[2026-11-09T07:52:06.219+0000] GC(39) Concurrent Mark Cycle
+[2026-11-09T07:52:06.360+0000] GC(39) Pause Remark 142M->142M(312M) 4.121ms
+[2026-11-09T07:52:06.400+0000] GC(39) Pause Cleanup 145M->145M(312M) 0.020ms
+[2026-11-09T07:52:06.401+0000] GC(39) Concurrent Mark Cycle 182.454ms
+[2026-11-09T07:52:10.706+0000] GC(40) Pause Young (Prepare Mixed) (G1 Evacuation Pause) 281M->125M(312M) 10.929ms
+
+######## java
+openjdk version "25" 2025-09-16 LTS
+OpenJDK Runtime Environment Temurin-25+36 (build 25+36-LTS)
+OpenJDK 64-Bit Server VM Temurin-25+36 (build 25+36-LTS, mixed mode, sharing)
+temurin-25-jre-amd64
+
+######## java flags
+     intx CICompilerCount                          = 3                                         {product} {ergonomic}
+     uint ConcGCThreads                            = 1                                         {product} {ergonomic}
+   size_t InitialHeapSize                          = 268435456                                 {product} {ergonomic}
+   size_t MaxHeapSize                              = 11735662592                               {product} {ergonomic}
+   size_t MaxMetaspaceSize                         = 18446744073709551615                      {product} {default}
+     uint ParallelGCThreads                        = 4                                         {product} {default}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+
+######## java NMT-ish
+VmRSS:	  689432 kB
+RssAnon:	  660576 kB
+RssFile:	   28824 kB
+Threads:	76
+
+######## node
+VmRSS:	  248872 kB
+RssAnon:	  163772 kB
+Threads:	269
+
+######## pg settings
+128MB
+100
+4MB
+ulp-go|5
+|4
+ucs-agent|5
+unifi-directory|2
+uid|3
+postgres|2
+unifi-core|2
+
+######## service wants
+multi-user.target
+● ├─cron.service
+● ├─dbus.service
+● ├─epmd.service
+● ├─mongodb.service
+● ├─nginx.service
+● ├─postgresql.service
+● ├─postgresql@14-main.service
+● ├─rabbitmq-server.service
+● ├─smartmontools.service
+● ├─snmpd.service
+● ├─systemd-ask-password-wall.path
+● ├─systemd-logind.service
+● ├─systemd-update-utmp-runlevel.service
+● ├─systemd-user-sessions.service
+● ├─ucs-agent.service
+● ├─uid-agent.service
+● ├─ulp-go.service
+● ├─unifi-core.service
+● ├─unifi-directory.service
+● ├─unifi-identity-update.service
+● ├─unifi.service
+● ├─uos-agent.service
+● ├─uos-discovery-client.service
+● ├─basic.target
+● │ ├─tmp.mount
+● │ ├─ubnt-dpkg-restore.service
+● │ ├─paths.target
+● │ ├─slices.target
+● │ │ ├─-.slice
+● │ │ └─system.slice
+● │ ├─sockets.target
+● │ │ ├─dbus.socket
+● │ │ ├─epmd.socket
+● │ │ ├─systemd-initctl.socket
+● │ │ ├─systemd-journald-audit.socket
+● │ │ ├─systemd-journald-dev-log.socket
+● │ │ └─systemd-journald.socket
+● │ ├─sysinit.target
+● │ │ ├─bootup-top-invoke.service
+● │ │ ├─dev-hugepages.mount
+● │ │ ├─dev-mqueue.mount
+● │ │ ├─kmod-static-nodes.service
+● │ │ ├─proc-sys-fs-binfmt_misc.automount
+● │ │ ├─sys-fs-fuse-connections.mount
+● │ │ ├─sys-kernel-config.mount
+● │ │ ├─sys-kernel-debug.mount
+● │ │ ├─sys-kernel-tracing.mount
+● │ │ ├─systemd-ask-password-console.path
+● │ │ ├─systemd-binfmt.service
+● │ │ ├─systemd-boot-system-token.service
+● │ │ ├─systemd-journal-flush.service
+● │ │ ├─systemd-journald.service
+● │ │ ├─systemd-machine-id-commit.service
+● │ │ ├─systemd-modules-load.service
+● │ │ ├─systemd-pstore.service
+● │ │ ├─systemd-random-seed.service
+● │ │ ├─systemd-sysctl.service
+● │ │ ├─systemd-sysusers.service
+● │ │ ├─systemd-tmpfiles-setup-dev.service
+
+######## mongod.service deps
+mongodb.service
+● └─multi-user.target
+●   ├─graphical.target
+●   └─sysready.target
+
+######## timers detail
+NEXT                        LEFT          LAST PASSED UNIT                         ACTIVATES
+Mon 2026-11-09 03:06:36 EST 13min left    n/a  n/a    systemd-tmpfiles-clean.timer systemd-tmpfiles-clean.service
+Mon 2026-11-09 06:05:49 EST 3h 12min left n/a  n/a    apt-daily-upgrade.timer      apt-daily-upgrade.service
+Mon 2026-11-09 13:12:01 EST 10h left      n/a  n/a    apt-daily.timer              apt-daily.service
+Sun 2026-11-15 03:10:26 EST 6 days left   n/a  n/a    e2scrub_all.timer            e2scrub_all.service
+n/a                         n/a           n/a  n/a    fstrim.timer                 fstrim.service
+n/a                         n/a           n/a  n/a    logrotate.timer              
+
+6 timers listed.
+ExecStartPre=-/usr/lib/apt/apt-helper wait-online
+ExecStart=/usr/lib/apt/apt.systemd.daily update
+
+######## cron
+/etc/cron.d:
+e2scrub_all
+uos
+uos-agent
+
+/etc/cron.daily:
+apt-compat
+dpkg
+logrotate
+
+/etc/cron.hourly:
+logrotate
+
+/etc/cron.monthly:
+
+/etc/cron.weekly:
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+17 *	* * *	root    cd / && run-parts --report /etc/cron.hourly
+25 6	* * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+47 6	* * 7	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.weekly )
+52 6	1 * *	root	test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.monthly )
+
+######## failed
+  UNIT LOAD ACTIVE SUB DESCRIPTION
+0 loaded units listed.
+
+######## identity units
+== ulp-go
+Requires=sysinit.target system.slice postgresql.service
+Wants=
+RequiredBy=
+WantedBy=unifi-core.service multi-user.target unifi-identity-update.service
+Description=ULP-GO
+== unifi-directory
+Requires=system.slice postgresql.service sysinit.target
+Wants=
+RequiredBy=
+WantedBy=multi-user.target
+Description=UniFi Directory Service
+== uid-agent
+Requires=system.slice postgresql.service sysinit.target
+Wants=
+RequiredBy=
+WantedBy=multi-user.target
+Description=UID Agent service
+== ucs-agent
+Requires=postgresql.service sysinit.target system.slice
+Wants=
+RequiredBy=
+WantedBy=multi-user.target
+Description=UniFi Credential Server Agent
+== unifi-identity-update
+Requires=postgresql.service sysinit.target system.slice
+Wants=ulp-go.service
+RequiredBy=
+WantedBy=multi-user.target
+Description=UniFi Identity Update
+== uos-agent
+Requires=sysinit.target uos.slice
+Wants=
+RequiredBy=
+WantedBy=multi-user.target
+Description=UniFi OS Agent
+== uos-discovery-client
+Requires=sysinit.target system.slice
+Wants=
+RequiredBy=
+WantedBy=multi-user.target
+Description=UniFi OS discovery client
+== snmpd
+Requires=sysinit.target system.slice
+Wants=
+RequiredBy=
+WantedBy=multi-user.target
+Description=Simple Network Management Protocol (SNMP) Daemon.
+
+######## unifi-core reverse deps
+Requires=network.target sysinit.target system.slice
+Wants=postgresql@14-main.service postgresql-cluster@14-main.service ulp-go.service nginx.service
+After=systemd-journald.socket basic.target ubnt-dpkg-cache.service system.slice postgresql@14-main.service sysinit.target postgresql-cluster@14-main.service ulp-go.service ubnt-dpkg-restore.service nginx.service -.mount uos-discovery-client.service
+
+######## tmpfs usage
+Filesystem      Size  Used Avail Use% Mounted on
+tmpfs           7.9G   40K  7.9G   1% /tmp
+tmpfs           3.2G  8.3M  3.2G   1% /run
+tmpfs           7.9G     0  7.9G   0% /var/lib/journal
+tmpfs            64M     0   64M   0% /var/opt/unifi/tmp
+
+######## proc vm
+60
+touch: cannot touch '/proc/sys/vm/swappiness': Read-only file system
+sysctl: permission denied on key "vm.swappiness"
