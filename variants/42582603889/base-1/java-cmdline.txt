@@ -1,0 +1,1 @@
+bash: line 1: /proc/$(pgrep -f ace.jar)/cmdline: ambiguous redirect
