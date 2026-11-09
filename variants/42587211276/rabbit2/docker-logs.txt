@@ -1,0 +1,11 @@
+Home Assistant detected, applying setup...
+Home Assistant setup applied!
+No UOS_UUID present, generating...
+Setting UOS_UUID to d29b95d1-5d68-56db-9fff-1ad3c976a373
+Setting FIRMWARE_PLATFORM to linux-x64
+Setting PRODUCT_NAME to UniFi OS Server
+Setting APP_MODEL to UOSSERVER
+Setting APP_VERSION to 5.1.42
+Applying resource tuning...
+  RabbitMQ Erlang schedulers: 2
+Resource tuning applied!
