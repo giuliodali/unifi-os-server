@@ -1,0 +1,30 @@
+Nov 09 01:58:38 2ff6d9777d9e java[1121]: 01:58:38,618 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [com.ubnt.service.trace.logerror.AnalyticsAppender]
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,052 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [java] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,052 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [javax] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,052 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [sun] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,052 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [net.schmizz] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,052 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.codahale] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,052 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.apache.tomcat] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,052 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.apache.catalina] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,052 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.mongodb] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,052 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.mongodb] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,824 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [com.ubnt.service.trace.logerror.AnalyticsAppender]
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,825 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [java] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,826 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7668d560 - Propagating ERROR level on Logger[java] onto the JUL framework
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,827 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [javax] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,827 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7668d560 - Propagating ERROR level on Logger[javax] onto the JUL framework
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,827 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [sun] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,827 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7668d560 - Propagating ERROR level on Logger[sun] onto the JUL framework
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,827 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [net.schmizz] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,827 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7668d560 - Propagating ERROR level on Logger[net.schmizz] onto the JUL framework
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,827 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.codahale] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,827 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7668d560 - Propagating ERROR level on Logger[com.codahale] onto the JUL framework
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,827 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.apache.tomcat] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,827 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7668d560 - Propagating ERROR level on Logger[org.apache.tomcat] onto the JUL framework
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,827 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.apache.catalina] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,827 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7668d560 - Propagating ERROR level on Logger[org.apache.catalina] onto the JUL framework
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,828 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.mongodb] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,828 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7668d560 - Propagating ERROR level on Logger[com.mongodb] onto the JUL framework
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,828 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.mongodb] to ERROR
+Nov 09 01:58:39 2ff6d9777d9e java[1121]: 01:58:39,828 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@7668d560 - Propagating ERROR level on Logger[org.mongodb] onto the JUL framework
+Nov 09 02:15:35 2ff6d9777d9e node24[726]:   Error: read ECONNRESET
