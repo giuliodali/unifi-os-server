@@ -1,0 +1,13 @@
+Home Assistant detected, applying setup...
+Home Assistant setup applied!
+No UOS_UUID present, generating...
+Setting UOS_UUID to bdd572bc-102a-54a2-9f84-4026c514fabb
+Setting FIRMWARE_PLATFORM to linux-x64
+Setting PRODUCT_NAME to UniFi OS Server
+Setting APP_MODEL to UOSSERVER
+Setting APP_VERSION to 5.1.42
+Applying resource tuning...
+  Unused mongodb.service disabled (UniFi Network uses its own mongod)
+  apt-daily, apt-daily-upgrade and e2scrub timers masked
+  PostgreSQL shared_buffers: 32MB
+Resource tuning applied!
