@@ -1,5 +1,8 @@
 name: perf-probe
 on:
+  push:
+    branches: [perf-lab]
+    paths: ['experiments/probe.sh', '.github/workflows/perf-probe.yaml']
   workflow_dispatch:
     inputs:
       image:
@@ -16,16 +19,17 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
+      IMAGE: ${{ inputs.image || 'ghcr.io/lemker/unifi-os-server:latest' }}
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - run: docker pull "${{ inputs.image }}"
-      - run: experiments/run-ha.sh uos "${{ inputs.image }}" '{"UOS_SYSTEM_IP":"127.0.0.1"}'
+      - run: docker pull "$IMAGE"
+      - run: experiments/run-ha.sh uos "$IMAGE" '{"UOS_SYSTEM_IP":"127.0.0.1"}'
       - run: experiments/wait-ready.sh uos 1200
       - run: |
-          sleep ${{ inputs.settle }}
+          sleep ${SETTLE:-60}
           mkdir -p out
-          docker cp "${{ inputs.script }}" uos:/root/probe.sh
+          docker cp "experiments/probe.sh" uos:/root/probe.sh
           docker exec uos bash /root/probe.sh > out/probe.txt 2>&1 || true
       - if: always()
         run: experiments/publish.sh out probe/${{ github.run_id }}
