@@ -32,7 +32,7 @@ jobs:
           docker logs uos > $OUT/docker-logs.txt 2>&1 || true
           sleep 240
           experiments/inventory.sh uos $OUT/inventory
-          experiments/sample.sh uos 600 15 $OUT/samples.csv
+          experiments/sample.sh uos 300 15 $OUT/samples.csv
           experiments/inventory.sh uos $OUT/inventory-late
           docker stats --no-stream > $OUT/docker-stats.txt
       - if: always()

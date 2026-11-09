@@ -1,6 +1,6 @@
 #!/bin/bash
 # Commit a results dir to the perf-results branch (retrying on races).
-SRC=$1 DEST=$2
+SRC=$(realpath "$1") DEST=$2
 set -e
 git config --global user.name "perf-lab"; git config --global user.email "perf-lab@users.noreply.github.com"
 rm -rf /tmp/pr; git clone -q --depth 1 --branch perf-results "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}" /tmp/pr 2>/dev/null || {
