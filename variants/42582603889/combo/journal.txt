@@ -1,0 +1,3 @@
+Archived and active journals take up 4.0M in the file system.
+4.0M	/run/log/journal
+1175

@@ -1,0 +1,6 @@
+[2026-11-09T08:26:52.730+0000] GC(67) Concurrent Mark Cycle
+[2026-11-09T08:26:52.854+0000] GC(67) Pause Remark 95M->95M(256M) 2.380ms
+[2026-11-09T08:26:52.890+0000] GC(67) Pause Cleanup 95M->95M(256M) 0.037ms
+[2026-11-09T08:26:52.891+0000] GC(67) Concurrent Mark Cycle 160.672ms
+[2026-11-09T08:27:52.732+0000] GC(68) Pause Young (Prepare Mixed) (G1 Periodic Collection) 99M->95M(256M) 1.664ms
+84
