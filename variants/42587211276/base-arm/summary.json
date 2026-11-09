@@ -1,0 +1,53 @@
+{
+ "options": {
+  "UOS_TUNING": false
+ },
+ "ready_s": "30",
+ "cpu_s_to_ready": 44.9,
+ "cpu_s_first_settle": 63.6,
+ "mem_mib_avg": 1438,
+ "mem_mib_end": 1427.0,
+ "anon_mib_avg": 1064,
+ "mem_growth_mib": -17.0,
+ "cpu_pct_avg": 2.12,
+ "cpu_pct_median": 1.6,
+ "network_up": false,
+ "core_https": "200",
+ "failed_units": "",
+ "oom_kills": "0",
+ "health": {
+  "network_status": "{\"meta\":{\"rc\":\"ok\",\"uuid\":\"5d789f94-5053-5ce4-91f7-6acb04b809f1\",\"server_version\":\"10.5.67\",\"server_running\":true,\"db_running\":true,\"db_connected\":true,\"db_journaling\":true,\"db_repairing\":false,\"db_importing\":false,\"db_importing_at\":-1,\"db_importing_name\":null,\"ucore_installation\":true},\"data\":[]}",
+  "core_https": "200",
+  "core_api": "200",
+  "failed_units": "",
+  "unifi": "active/restarts=0",
+  "unifi-core": "active/restarts=0",
+  "rabbitmq-server": "active/restarts=0",
+  "ulp-go": "active/restarts=0",
+  "postgresql@14-main": "active/restarts=0",
+  "mongodb": "active/restarts=0",
+  "network_rmq_conn": "1",
+  "mongo27017_listening": "1",
+  "oom_kills": "0"
+ },
+ "services_mib": {
+  "unifi.service": 719,
+  "unifi-core.service": 213,
+  "postgresql@14-main.service": 165,
+  "rabbitmq-server.service": 77,
+  "ulp-go.service": 72,
+  "mongodb.service": 48,
+  "unifi-directory.service": 16,
+  "uid-agent.service": 15,
+  "uos-agent.service": 11,
+  "nginx.service": 10,
+  "systemd-journald.service": 9,
+  "unifi-identity-update.service": 7,
+  "uos-discovery-client.service": 5,
+  "snmpd.service": 3,
+  "systemd-logind.service": 1,
+  "dbus.service": 1,
+  "cron.service": 0,
+  "epmd.service": 0
+ }
+}
