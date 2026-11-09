@@ -1,0 +1,21 @@
+Resource report every 30 min
+Applying resource tuning...
+  UniFi Network max heap: 1024MB
+  Unused mongodb.service disabled (UniFi Network uses its own mongod)
+  journald capped at 32MB
+  apt-daily, apt-daily-upgrade and e2scrub timers masked
+  MALLOC_ARENA_MAX=2
+Resource tuning applied!
+[resources] total=1307M java_heap=144M->144M(258M) unifi=572M/- unifi-core=209M/- postgresql=178M/- rabbitmq-server=113M/- ulp-go=75M/- nginx=9M/-
+Resource report every 30 min
+Resource tuning disabled (UOS_TUNING=false)
+[resources] total=1333M java_heap=155M->155M(320M) unifi=794M/- unifi-core=135M/- postgresql=86M/- rabbitmq-server=121M/- ulp-go=32M/- mongodb=45M/- nginx=9M/-
+Resource report every 30 min
+Applying resource tuning...
+  UniFi Network max heap: 1024MB
+  Unused mongodb.service disabled (UniFi Network uses its own mongod)
+  journald capped at 32MB
+  apt-daily, apt-daily-upgrade and e2scrub timers masked
+  MALLOC_ARENA_MAX=2
+Resource tuning applied!
+[resources] total=1102M java_heap=239M->120M(258M) unifi=670M/- unifi-core=128M/- postgresql=85M/- rabbitmq-server=74M/- ulp-go=32M/- nginx=9M/-

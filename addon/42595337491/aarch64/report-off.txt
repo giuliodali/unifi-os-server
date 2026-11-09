@@ -1,0 +1,10 @@
+NEXT                        LEFT       LAST                        PASSED  UNIT                      ACTIVATES
+Mon 2026-11-09 02:17:28 PST 29min left Mon 2026-11-09 01:47:28 PST 53s ago uos-resource-report.timer uos-resource-report.service
+
+1 timers listed.
+Pass --all to see loaded but inactive timers, too.
+-- Journal begins at Mon 2026-11-09 01:45:26 PST, ends at Mon 2026-11-09 01:47:28 PST. --
+Nov 09 01:47:28 8ee9b2679350 systemd[1]: Starting Log UniFi OS Server resource usage...
+Nov 09 01:47:28 8ee9b2679350 sh[1602]: [resources] total=1333M java_heap=155M->155M(320M) unifi=794M/- unifi-core=135M/- postgresql=86M/- rabbitmq-server=121M/- ulp-go=32M/- mongodb=45M/- nginx=9M/-
+Nov 09 01:47:28 8ee9b2679350 systemd[1]: uos-resource-report.service: Succeeded.
+Nov 09 01:47:28 8ee9b2679350 systemd[1]: Finished Log UniFi OS Server resource usage.
