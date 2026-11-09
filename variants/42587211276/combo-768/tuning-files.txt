@@ -1,0 +1,20 @@
+[Service]
+Environment="RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=+S 1:1 +SDcpu 1:1 +SDio 1"
+[Service]
+EnvironmentFile=-/etc/uos-tuning/unifi.env
+UNIFI_JVM_OPTS="-Dunifi-os.server=true -Dorg.xerial.snappy.tempdir=/usr/lib/unifi/run -XX:+UseG1GC -Xss1024K -XX:-TieredCompilation -Xms256M -Xmx768M -XX:G1PeriodicGCInterval=60000 -XX:TrimNativeHeapInterval=60000"
+[Journal]
+RuntimeMaxUse=32M
+SystemMaxUse=32M
+[Manager]
+DefaultEnvironment=MALLOC_ARENA_MAX=2
+lrwxrwxrwx 1 root root    9 Nov  9 00:37 apt-daily-upgrade.timer -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 00:37 apt-daily.timer -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 00:37 console-getty.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 00:37 container-getty@.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 00:37 e2scrub_all.timer -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 00:37 getty.target -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 00:37 getty@.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 00:37 serial-getty@.service -> /dev/null
+drwxr-xr-x 1 root root 4096 Sep  8 09:42 timers.target.wants
+disabled
