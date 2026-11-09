@@ -1,0 +1,26 @@
+/                                                   475      - 1310863360        -        -
+system.slice                                        464      - 1291534336        -        -
+system.slice/unifi.service                          106      - 604524544        -        -
+system.slice/unifi-core.service                     270      - 242114560        -        -
+system.slice/system-postgresql.slice                 19      - 174592000        -        -
+system.slice/ulp-go.service                           8      - 77127680        -        -
+system.slice/rabbitmq-server.service                 13      - 74383360        -        -
+system.slice/system-postgresql\x2dcluster.slice       -      - 47374336        -        -
+system.slice/unifi-directory.service                  9      - 17317888        -        -
+system.slice/uid-agent.service                       12      - 16728064        -        -
+uos.slice                                             7      - 10305536        -        -
+uos.slice/uos-agent.service                           7      - 10289152        -        -
+system.slice/nginx.service                            6      - 10129408        -        -
+system.slice/unifi-identity-update.service            9      -  7110656        -        -
+init.scope                                            4      -  6070272        -        -
+system.slice/systemd-journald.service                 1      -  5517312        -        -
+system.slice/uos-discovery-client.service             6      -  5087232        -        -
+system.slice/snmpd.service                            1      -  3219456        -        -
+system.slice/systemd-logind.service                   1      -  1486848        -        -
+system.slice/dbus.service                             1      -  1314816        -        -
+system.slice/epmd.service                             1      -   917504        -        -
+system.slice/cron.service                             1      -   868352        -        -
+dev-hugepages.mount                                   -      -     8192        -        -
+system.slice/epmd.socket                              -      -     8192        -        -
+sys-fs-fuse-connections.mount                         -      -     4096        -        -
+Archived and active journals take up 4.0M in the file system.

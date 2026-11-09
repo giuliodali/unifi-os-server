@@ -1,0 +1,6 @@
+-- Journal begins at Mon 2026-11-09 04:08:00 EST, ends at Mon 2026-11-09 09:08:07 EST. --
+-- No entries --
+● mongodb.service - An object/document-oriented database
+     Loaded: loaded (/lib/systemd/system/mongodb.service; disabled; vendor preset: enabled)
+     Active: inactive (dead)
+       Docs: man:mongod(1)
