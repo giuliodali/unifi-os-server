@@ -1,0 +1,13 @@
+network_status={"meta":{"rc":"ok","uuid":"6c8a415d-d15f-5bbf-b48e-eb201fad498e","server_version":"10.5.67","server_running":true,"db_running":true,"db_connected":true,"db_journaling":true,"db_repairing":false,"db_importing":false,"db_importing_at":-1,"db_importing_name":null,"ucore_installation":true},"data":[]}
+core_https=200
+core_api=200
+failed_units=
+unifi=active/restarts=0
+unifi-core=active/restarts=0
+rabbitmq-server=active/restarts=0
+ulp-go=active/restarts=0
+postgresql@14-main=active/restarts=0
+mongodb=active/restarts=0
+network_rmq_conn=1
+mongo27017_listening=1
+oom_kills=0
