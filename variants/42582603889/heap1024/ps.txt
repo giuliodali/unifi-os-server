@@ -1,0 +1,40 @@
+    PID   RSS %CPU     TIME COMMAND
+   1125 625168 2.0 00:00:36 /usr/bin/java -Dfile.encoding=UTF-8 -Djava.awt.headless=true -Dapple.awt.UIElement=true -Dunifi.core.enabled=true -Dunifi.mongodb.service.enabled=false -Dunifi.rmq.enabled=true -Dunifi.rmq.certificates=/etc/rabbitmq/ssl -Dunifi.external_disk.inserted= -Dspring.profiles.active=unifi-os -Dunifi-os.server=true -Dorg.xerial.snappy.tempdir=/usr/lib/unifi/run -XX:+UseG1GC -Xs
+    732 218492 0.8 00:00:14 unifi-core
+    221 101168 0.1 00:00:03 /usr/lib/erlang/erts-15.2.7.9/bin/beam.smp -W w -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -pc unicode -P 1048576 -t 5000000 -stbt db -zdbbl 128000 -sbwt none -sbwtdcpu none -sbwtdio none -- -root /usr/lib/erlang -bindir /usr/lib/erlang/erts-15.2.7.9/bin -progname erl -- -home /home/rabbitmq -- -pa  -noshell -noinput -s rabbit boot -boot start_sas
+   1439 98968  0.2 00:00:04 bin/mongod --dbpath /usr/lib/unifi/data/db --port 27117 --bind_ip 127.0.0.1 --unixSocketPrefix /usr/lib/unifi/run --logRotate reopen --logappend --logpath /usr/lib/unifi/logs/mongod.log --pidfilepath /usr/lib/unifi/run/mongod.pid --wiredTigerEngineConfigString=cache_size=256M
+    654 74816  0.1 00:00:02 /usr/sbin/ulp-go-app --prop /usr/lib/ulp-go/config.props
+    578 58224  0.0 00:00:01 /usr/sbin/unifi-directory-app --prop /usr/lib/unifi-directory/config.props
+   1238 56796  0.0 00:00:01 /usr/sbin/uid-agent-app --props /usr/lib/uid-agent/config.props
+    418 28780  0.0 00:00:00 /usr/lib/postgresql/14/bin/postgres -D /data/postgresql/14/main/data -c config_file=/etc/postgresql/14/main/postgresql.conf
+    664 28856  0.0 00:00:00 postgres: 14/main: ulp-go ulp-go [local] idle
+    420 28412  0.0 00:00:00 postgres: 14/main: checkpointer 
+   1019 24700  0.0 00:00:00 postgres: 14/main: unifi-core unifi-core 127.0.0.1(41308) idle
+   1277 24052  0.0 00:00:00 postgres: 14/main: uid uid [local] idle
+    666 23940  0.0 00:00:00 postgres: 14/main: ulp-go ulp-go [local] idle
+    138 23304  0.0 00:00:00 /usr/bin/uos-agent
+    665 22024  0.0 00:00:00 postgres: 14/main: ulp-go ulp-go-syslog [local] idle
+    605 21800  0.0 00:00:00 postgres: 14/main: unifi-directory unifi-directory [local] idle
+    667 21944  0.0 00:00:00 postgres: 14/main: ulp-go ulp-go [local] idle
+    580 19656  0.0 00:00:00 /usr/sbin/unifi-identity-update-app --prop /usr/lib/unifi-identity-update/config.props
+   1305 19524  0.0 00:00:00 postgres: 14/main: uid uid [local] idle
+    680 18332  0.0 00:00:00 postgres: 14/main: ulp-go ulp-go [local] idle
+   2482 18144  0.0 00:00:00 postgres: 14/main: uid uid [local] idle
+   1031 17672  0.0 00:00:00 postgres: 14/main: unifi-core unifi-core 127.0.0.1(41320) idle
+   2449 17412  0.0 00:00:00 postgres: 14/main: ulp-go ulp-go-syslog [local] idle
+    641 17540  0.0 00:00:00 postgres: 14/main: unifi-directory unifi-directory [local] idle
+      1 11316  0.0 00:00:00 /sbin/init
+    142 11080  0.0 00:00:00 /usr/sbin/snmpd -LOw -u Debian-snmp -g Debian-snmp -I -smux mteTrigger mteTriggerConf -f -p /run/snmpd.pid -n ui-snmp -c /etc/snmp/ui-snmpd.conf
+    422 10624  0.0 00:00:00 postgres: 14/main: walwriter 
+    157 10088  0.0 00:00:00 nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf
+    423  9664  0.0 00:00:00 postgres: 14/main: autovacuum launcher 
+    425  8588  0.0 00:00:00 postgres: 14/main: logical replication launcher 
+    139  8476  0.0 00:00:00 /usr/bin/uos-discovery-client
+    110  8708  0.0 00:00:00 /lib/systemd/systemd-journald
+    421  7708  0.0 00:00:00 postgres: 14/main: background writer 
+   1578  6808  0.0 00:00:00 nginx: cache manager process
+   1574  6832  0.0 00:00:00 nginx: worker process
+   1575  6832  0.0 00:00:00 nginx: worker process
+   1576  6832  0.0 00:00:00 nginx: worker process
+   1577  6832  0.0 00:00:00 nginx: worker process
+    124  6668  0.0 00:00:01 /lib/systemd/systemd-logind
