@@ -1,0 +1,9 @@
+[Service]
+Environment="RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=+S 1:1 +SDcpu 1:1 +SDio 1"
+lrwxrwxrwx 1 root root    9 Nov  9 01:37 console-getty.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 01:37 container-getty@.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 01:37 getty.target -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 01:37 getty@.service -> /dev/null
+lrwxrwxrwx 1 root root    9 Nov  9 01:37 serial-getty@.service -> /dev/null
+drwxr-xr-x 1 root root 4096 Sep  8 09:42 timers.target.wants
+enabled
