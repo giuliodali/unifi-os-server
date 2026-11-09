@@ -1,0 +1,12 @@
+/                                                   504      - 1293029376        -        -
+system.slice                                        492      - 1273217024        -        -
+system.slice/unifi.service                          104      - 593461248        -        -
+system.slice/unifi-core.service                     269      - 201211904        -        -
+system.slice/system-postgresql.slice                 24      - 186126336        -        -
+system.slice/rabbitmq-server.service                 28      - 79347712        -        -
+system.slice/ulp-go.service                           8      - 76673024        -        -
+system.slice/system-postgresql\x2dcluster.slice       -      - 46972928        -        -
+system.slice/ucs-agent.service                       10      - 19259392        -        -
+system.slice/unifi-directory.service                  9      - 18006016        -        -
+system.slice/uid-agent.service                       12      - 15581184        -        -
+uos.slice                                             8      - 11137024        -        -

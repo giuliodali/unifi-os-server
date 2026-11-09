@@ -1,0 +1,18 @@
+Resource report every 30 min
+Applying resource tuning...
+  UniFi Network max heap: 1024MB
+  Unused mongodb.service disabled (UniFi Network uses its own mongod)
+  journald capped at 32MB
+  apt-daily, apt-daily-upgrade and e2scrub timers masked
+  MALLOC_ARENA_MAX=2
+Resource tuning applied!
+Resource report every 30 min
+Resource tuning disabled (UOS_TUNING=false)
+Resource report every 30 min
+Applying resource tuning...
+  UniFi Network max heap: 1024MB
+  Unused mongodb.service disabled (UniFi Network uses its own mongod)
+  journald capped at 32MB
+  apt-daily, apt-daily-upgrade and e2scrub timers masked
+  MALLOC_ARENA_MAX=2
+Resource tuning applied!
