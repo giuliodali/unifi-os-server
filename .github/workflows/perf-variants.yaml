@@ -1,0 +1,38 @@
+name: perf-variants
+on:
+  push:
+    branches: [perf-lab]
+    paths: ['experiments/variants.json', 'uos-tuning.sh', 'uos-entrypoint.sh', 'experiments/measure.sh', '.github/workflows/perf-variants.yaml']
+permissions:
+  contents: write
+jobs:
+  setup:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: m
+        run: echo "matrix=$(jq -c . experiments/variants.json)" >> $GITHUB_OUTPUT
+  variant:
+    needs: setup
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        include: ${{ fromJson(needs.setup.outputs.matrix) }}
+    runs-on: ${{ matrix.runner || 'ubuntu-24.04' }}
+    timeout-minutes: 75
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -q -t uos-test .
+      - run: |
+          echo '${{ toJson(matrix.options) }}' > /tmp/opts.json
+          experiments/measure.sh uos uos-test "$(jq -c . /tmp/opts.json)" $PWD/out/${{ matrix.name }}
+          docker logs uos 2>&1 | head -120 > out/${{ matrix.name }}/docker-logs.txt
+      - if: always()
+        run: |
+          mkdir -p out/${{ matrix.name }}; docker logs uos 2>&1 | head -120 > out/${{ matrix.name }}/docker-logs.txt || true
+          experiments/publish.sh out/${{ matrix.name }} variants/${{ github.run_id }}/${{ matrix.name }}
