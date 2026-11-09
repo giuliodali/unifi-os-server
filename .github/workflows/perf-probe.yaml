@@ -1,0 +1,31 @@
+name: perf-probe
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        default: ghcr.io/lemker/unifi-os-server:latest
+      script:
+        description: path of a script in the repo to run inside the container after ready
+        default: experiments/probe.sh
+      settle:
+        default: '60'
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker pull "${{ inputs.image }}"
+      - run: experiments/run-ha.sh uos "${{ inputs.image }}" '{"UOS_SYSTEM_IP":"127.0.0.1"}'
+      - run: experiments/wait-ready.sh uos 1200
+      - run: |
+          sleep ${{ inputs.settle }}
+          mkdir -p out
+          docker cp "${{ inputs.script }}" uos:/root/probe.sh
+          docker exec uos bash /root/probe.sh > out/probe.txt 2>&1 || true
+      - if: always()
+        run: experiments/publish.sh out probe/${{ github.run_id }}
