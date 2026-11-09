@@ -1,0 +1,41 @@
+name: perf-inventory
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        default: ghcr.io/lemker/unifi-os-server:latest
+  push:
+    branches: [perf-lab]
+    paths: ['experiments/inventory.sh', '.github/workflows/perf-inventory.yaml']
+permissions:
+  contents: write
+jobs:
+  inventory:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    env:
+      IMAGE: ${{ inputs.image || 'ghcr.io/lemker/unifi-os-server:latest' }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker pull "$IMAGE"; docker image inspect "$IMAGE" --format '{{.Size}}'
+      - run: experiments/run-ha.sh uos "$IMAGE" '{"UOS_SYSTEM_IP":"127.0.0.1"}'
+      - id: ready
+        run: echo "secs=$(experiments/wait-ready.sh uos 1200)" | tee -a $GITHUB_OUTPUT
+      - run: |
+          OUT=out/$(uname -m); mkdir -p $OUT
+          echo "ready_secs=${{ steps.ready.outputs.secs }}" > $OUT/ready.txt
+          docker logs uos > $OUT/docker-logs.txt 2>&1 || true
+          sleep 240
+          experiments/inventory.sh uos $OUT/inventory
+          experiments/sample.sh uos 600 15 $OUT/samples.csv
+          experiments/inventory.sh uos $OUT/inventory-late
+          docker stats --no-stream > $OUT/docker-stats.txt
+      - if: always()
+        run: |
+          mkdir -p out/$(uname -m); docker logs uos > out/$(uname -m)/docker-logs.txt 2>&1 || true
+          experiments/publish.sh out/$(uname -m) inventory/${{ github.run_id }}/$(uname -m)

@@ -13,6 +13,8 @@ on:
       - 'renovate.json'
       - 'ha-app/**'
       - 'repository.yaml'
+      - 'experiments/**'
+      - '.github/workflows/perf-*.yaml'
 
 env:
   REGISTRY: ghcr.io
