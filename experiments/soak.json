@@ -3,7 +3,8 @@
   "name": "base",
   "options": {
    "UOS_TUNING": false
-  }
+  },
+  "rev": 2
  },
  {
   "name": "tuned",
