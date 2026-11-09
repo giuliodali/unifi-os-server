@@ -1,0 +1,30 @@
+Nov 09 01:37:54 ef8435cfbeae java[1131]: 01:37:54,766 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [com.ubnt.service.trace.logerror.AnalyticsAppender]
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,106 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [java] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,106 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [javax] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,106 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [sun] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,106 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [net.schmizz] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,106 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.codahale] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,106 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.apache.tomcat] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,106 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.apache.catalina] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,106 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.mongodb] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,106 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.mongodb] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,766 |-INFO in ch.qos.logback.core.model.processor.AppenderModelHandler - About to instantiate appender of type [com.ubnt.service.trace.logerror.AnalyticsAppender]
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,778 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [java] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,779 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@6d2260db - Propagating ERROR level on Logger[java] onto the JUL framework
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,780 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [javax] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,780 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@6d2260db - Propagating ERROR level on Logger[javax] onto the JUL framework
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,780 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [sun] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,780 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@6d2260db - Propagating ERROR level on Logger[sun] onto the JUL framework
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,782 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [net.schmizz] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,782 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@6d2260db - Propagating ERROR level on Logger[net.schmizz] onto the JUL framework
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,782 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.codahale] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,782 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@6d2260db - Propagating ERROR level on Logger[com.codahale] onto the JUL framework
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,782 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.apache.tomcat] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,782 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@6d2260db - Propagating ERROR level on Logger[org.apache.tomcat] onto the JUL framework
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,782 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.apache.catalina] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,782 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@6d2260db - Propagating ERROR level on Logger[org.apache.catalina] onto the JUL framework
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,786 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [com.mongodb] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,786 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@6d2260db - Propagating ERROR level on Logger[com.mongodb] onto the JUL framework
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,786 |-INFO in ch.qos.logback.classic.model.processor.LoggerModelHandler - Setting level of logger [org.mongodb] to ERROR
+Nov 09 01:37:55 ef8435cfbeae java[1131]: 01:37:55,786 |-INFO in ch.qos.logback.classic.jul.LevelChangePropagator@6d2260db - Propagating ERROR level on Logger[org.mongodb] onto the JUL framework
+Nov 09 01:58:29 ef8435cfbeae node24[740]:   Error: read ECONNRESET
