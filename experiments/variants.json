@@ -53,13 +53,13 @@
   }
  },
  {
-  "name": "heap768-tiered",
+  "name": "heap768-g1trim",
   "options": {
    "UOS_TUNING": true,
    "UOS_DISABLE_UNUSED_MONGODB": false,
    "UOS_MASK_HOUSEKEEPING_TIMERS": false,
    "UOS_JVM_MAX_HEAP_MB": 768,
-   "UOS_JVM_EXTRA_OPTS": "-XX:+TieredCompilation -XX:ReservedCodeCacheSize=96m"
+   "UOS_JVM_EXTRA_OPTS": "-XX:G1PeriodicGCInterval=60000 -XX:TrimNativeHeapInterval=60000"
   }
  },
  {
@@ -70,16 +70,6 @@
    "UOS_MASK_HOUSEKEEPING_TIMERS": false,
    "UOS_JVM_MAX_HEAP_MB": 768,
    "UOS_JVM_EXTRA_OPTS": "-XX:+UseSerialGC"
-  }
- },
- {
-  "name": "heap768-g1trim",
-  "options": {
-   "UOS_TUNING": true,
-   "UOS_DISABLE_UNUSED_MONGODB": false,
-   "UOS_MASK_HOUSEKEEPING_TIMERS": false,
-   "UOS_JVM_MAX_HEAP_MB": 768,
-   "UOS_JVM_EXTRA_OPTS": "-XX:G1PeriodicGCInterval=60000 -XX:TrimNativeHeapInterval=60000"
   }
  },
  {
@@ -110,6 +100,15 @@
   }
  },
  {
+  "name": "rabbit2",
+  "options": {
+   "UOS_TUNING": true,
+   "UOS_DISABLE_UNUSED_MONGODB": false,
+   "UOS_MASK_HOUSEKEEPING_TIMERS": false,
+   "UOS_RABBITMQ_SCHEDULERS": 2
+  }
+ },
+ {
   "name": "malloc2",
   "options": {
    "UOS_TUNING": true,
@@ -119,16 +118,7 @@
   }
  },
  {
-  "name": "pg32",
-  "options": {
-   "UOS_TUNING": true,
-   "UOS_DISABLE_UNUSED_MONGODB": false,
-   "UOS_MASK_HOUSEKEEPING_TIMERS": false,
-   "UOS_PG_SHARED_BUFFERS_MB": 32
-  }
- },
- {
-  "name": "combo",
+  "name": "combo-768",
   "options": {
    "UOS_TUNING": true,
    "UOS_JVM_MAX_HEAP_MB": 768,
@@ -137,8 +127,41 @@
    "UOS_RABBITMQ_SCHEDULERS": 1,
    "UOS_MALLOC_ARENA_MAX": 2,
    "UOS_JOURNAL_MAX_MB": 32,
-   "UOS_MASK_HOUSEKEEPING_TIMERS": true,
-   "UOS_PG_SHARED_BUFFERS_MB": 32
+   "UOS_MASK_HOUSEKEEPING_TIMERS": true
+  }
+ },
+ {
+  "name": "combo-1024",
+  "options": {
+   "UOS_TUNING": true,
+   "UOS_JVM_MAX_HEAP_MB": 1024,
+   "UOS_JVM_EXTRA_OPTS": "-XX:G1PeriodicGCInterval=60000 -XX:TrimNativeHeapInterval=60000",
+   "UOS_DISABLE_UNUSED_MONGODB": true,
+   "UOS_RABBITMQ_SCHEDULERS": 1,
+   "UOS_MALLOC_ARENA_MAX": 2,
+   "UOS_JOURNAL_MAX_MB": 32,
+   "UOS_MASK_HOUSEKEEPING_TIMERS": true
+  }
+ },
+ {
+  "name": "combo-768-arm",
+  "runner": "ubuntu-24.04-arm",
+  "options": {
+   "UOS_TUNING": true,
+   "UOS_JVM_MAX_HEAP_MB": 768,
+   "UOS_JVM_EXTRA_OPTS": "-XX:G1PeriodicGCInterval=60000 -XX:TrimNativeHeapInterval=60000",
+   "UOS_DISABLE_UNUSED_MONGODB": true,
+   "UOS_RABBITMQ_SCHEDULERS": 1,
+   "UOS_MALLOC_ARENA_MAX": 2,
+   "UOS_JOURNAL_MAX_MB": 32,
+   "UOS_MASK_HOUSEKEEPING_TIMERS": true
+  }
+ },
+ {
+  "name": "base-arm",
+  "runner": "ubuntu-24.04-arm",
+  "options": {
+   "UOS_TUNING": false
   }
  }
 ]

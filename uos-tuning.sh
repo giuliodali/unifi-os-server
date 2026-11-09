@@ -17,7 +17,6 @@
 #   UOS_JOURNAL_MAX_MB            cap for the in-RAM systemd journal (0 = stock)
 #   UOS_MASK_HOUSEKEEPING_TIMERS  mask apt-daily/apt-daily-upgrade/e2scrub timers
 #   UOS_MALLOC_ARENA_MAX          glibc malloc arenas for all services (0 = stock)
-#   UOS_PG_SHARED_BUFFERS_MB      PostgreSQL shared_buffers (0 = stock, 128MB)
 
 TUNING_DIR=/etc/uos-tuning
 TUNING_TAG=90-uos-tuning
@@ -31,7 +30,6 @@ _remove_uos_tuning() {
     rm -f /etc/systemd/system/*.service.d/$TUNING_TAG.conf \
           /etc/systemd/system.conf.d/$TUNING_TAG.conf \
           /etc/systemd/journald.conf.d/$TUNING_TAG.conf \
-          /etc/postgresql/*/main/conf.d/$TUNING_TAG.conf \
           /etc/rabbitmq/conf.d/$TUNING_TAG.conf
     for t in apt-daily.timer apt-daily-upgrade.timer e2scrub_all.timer; do
         [ "$(readlink /etc/systemd/system/$t 2>/dev/null)" = /dev/null ] && rm -f /etc/systemd/system/$t

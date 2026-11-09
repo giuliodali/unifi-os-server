@@ -20,8 +20,8 @@ if [ -f /data/options.json ]; then
     # Map resource tuning options to UOS_* environment variables
     for opt in UOS_TUNING UOS_JVM_MAX_HEAP_MB UOS_JVM_EXTRA_OPTS UOS_DISABLE_UNUSED_MONGODB \
                UOS_RABBITMQ_SCHEDULERS UOS_JOURNAL_MAX_MB UOS_MASK_HOUSEKEEPING_TIMERS \
-               UOS_MALLOC_ARENA_MAX UOS_PG_SHARED_BUFFERS_MB; do
-        val=$(jq -r --arg k "$opt" '.[$k] // empty | tostring' /data/options.json)
+               UOS_MALLOC_ARENA_MAX; do
+        val=$(jq -r --arg k "$opt" 'if has($k) and .[$k] != null then .[$k] | tostring else empty end' /data/options.json)
         if [ -n "$val" ]; then
             export "$opt=$val"
         fi
