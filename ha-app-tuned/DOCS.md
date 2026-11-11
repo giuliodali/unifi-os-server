@@ -36,10 +36,13 @@ configuration back.
 This app has its own config folder (`addon_configs/<repo-hash>_unifi_os_server_tuned`),
 separate from the original app. To test with your real configuration:
 
-1. Stop the original UniFi OS Server app (both apps use the same ports).
+1. Take a backup of the original app, then stop it (both apps use the same ports, and the
+   databases must not be running while you copy).
 2. Install this app but **don't start it** yet. Start and stop it once if the folder doesn't appear.
 3. Copy the *contents* of the original app's `addon_configs/..._unifi_os_server` folder into
-   this app's folder (Samba/SSH add-on), replacing what's there.
+   this app's folder, replacing what's there. Copy **as root from an SSH session, preserving
+   ownership** (for example `cp -a /addon_configs/<old>/. /addon_configs/<new>/`). Don't copy over
+   Samba: it loses Linux file owners and permissions, and MongoDB/PostgreSQL may then fail to start.
 4. Start this app. To go back, stop it and start the original again. Its data is untouched.
 
 Alternatively, take a backup in UniFi OS (**Settings → Backups**) and restore it in this app.
