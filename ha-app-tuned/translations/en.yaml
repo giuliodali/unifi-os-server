@@ -17,11 +17,12 @@ configuration:
   UOS_JVM_RETURN_MEMORY:
     name: Return idle Java memory
     description: >-
-      Lets UniFi Network give unused heap and native memory back to the system when idle.
+      Lets UniFi Network give unused heap and native memory back to the system when idle
+      (checked every 5 min) and shrink its heap to what it actually uses.
   UOS_DISABLE_UNUSED_MONGODB:
     name: Disable unused MongoDB
     description: >-
-      Don't start the stand-alone mongodb.service. UniFi Network runs its own MongoDB
+      Mask the stand-alone mongodb.service. UniFi Network runs its own MongoDB
       and nothing connects to the stand-alone one.
   UOS_JOURNAL_MAX_MB:
     name: Journal size limit (MB)

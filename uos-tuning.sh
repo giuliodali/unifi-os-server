@@ -10,9 +10,10 @@
 #   UOS_JVM_MAX_HEAP_MB           UniFi Network max Java heap. 0 = stock
 #                                 (-XX:MaxRAMPercentage=70, i.e. 70% of host RAM)
 #   UOS_JVM_RETURN_MEMORY         let the JVM hand unused heap and malloc memory
-#                                 back to the OS when idle (G1 periodic GC + native trim)
+#                                 back to the OS when idle (G1 periodic GC + native
+#                                 trim every 5 min, and shrink the heap to ~30% free)
 #   UOS_JVM_EXTRA_OPTS            extra JVM flags appended to UniFi Network
-#   UOS_DISABLE_UNUSED_MONGODB    don't start the stand-alone mongodb.service
+#   UOS_DISABLE_UNUSED_MONGODB    mask the stand-alone mongodb.service
 #                                 (UniFi Network runs its own mongod on 27117)
 #   UOS_RABBITMQ_SCHEDULERS       Erlang scheduler threads for RabbitMQ (0 = stock,
 #                                 one per CPU)
@@ -40,7 +41,13 @@ _remove_uos_tuning() {
     for t in apt-daily.timer apt-daily-upgrade.timer e2scrub_all.timer; do
         [ "$(readlink /etc/systemd/system/$t 2>/dev/null)" = /dev/null ] && rm -f /etc/systemd/system/$t
     done
-    # Re-enable mongodb.service only if we were the ones who disabled it
+    # Undo our mongodb.service changes only if we made them
+    if [ -f "$TUNING_STATE/mongodb-masked" ]; then
+        [ "$(readlink /etc/systemd/system/mongodb.service 2>/dev/null)" = /dev/null ] && \
+            rm -f /etc/systemd/system/mongodb.service
+        rm -f "$TUNING_STATE/mongodb-masked"
+    fi
+    # Older versions disabled it instead of masking it
     if [ -f "$TUNING_STATE/mongodb-disabled" ]; then
         systemctl enable mongodb.service >/dev/null 2>&1 || true
         rm -f "$TUNING_STATE/mongodb-disabled"
@@ -106,7 +113,10 @@ apply_uos_tuning() {
     # --- UniFi Network JVM -------------------------------------------------
     local heap="${UOS_JVM_MAX_HEAP_MB:-0}" extra="${UOS_JVM_EXTRA_OPTS:-}"
     if _is_true "${UOS_JVM_RETURN_MEMORY:-false}"; then
-        extra="-XX:G1PeriodicGCInterval=60000 -XX:TrimNativeHeapInterval=60000 $extra"
+        # Periodic GC + native trim every 5 min. G1 only shrinks the heap when more
+        # than MaxHeapFreeRatio of it is free (stock 70%), so lower that too, or the
+        # committed heap stays at its high-water mark.
+        extra="-XX:G1PeriodicGCInterval=300000 -XX:TrimNativeHeapInterval=300000 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=30 $extra"
         extra="${extra% }"
     fi
     if _is_pos_int "$heap" || [ -n "$extra" ]; then
@@ -116,7 +126,8 @@ apply_uos_tuning() {
         local opts="$stock"
         if _is_pos_int "$heap"; then
             opts=$(echo "$opts" | sed -E 's/-XX:(Max|Min|Initial)RAMPercentage=[0-9.]+//g; s/-Xm[sx][0-9]+[kKmMgG]?//g')
-            opts="$opts -Xms$(( heap < 256 ? heap : 256 ))M -Xmx${heap}M"
+            # A small initial heap, so the idle heap can shrink below it
+            opts="$opts -Xms$(( heap < 128 ? heap : 128 ))M -Xmx${heap}M"
             echo "  UniFi Network max heap: ${heap}MB"
         fi
         if [ -n "$extra" ]; then
@@ -137,15 +148,18 @@ EnvironmentFile=-$TUNING_DIR/unifi.env"
     # --- Stand-alone MongoDB ----------------------------------------------
     # UniFi Network starts its own mongod (port 27117, data in /var/lib/unifi/db)
     # when UNIFI_MONGODB_SERVICE_ENABLED=false, leaving mongodb.service (27017)
-    # running with no clients. Only disable it if that's still the case.
+    # running with no clients. Disabling it isn't enough: UniFi Network runs
+    # "sudo systemctl start mongodb" at startup anyway, so mask it. Only while
+    # the stock config still uses the embedded mongod.
     if _is_true "${UOS_DISABLE_UNUSED_MONGODB:-true}"; then
         local svc_enabled
         svc_enabled=$( set +u; . /etc/default/unifi >/dev/null 2>&1
                        echo "${UNIFI_MONGODB_SERVICE_ENABLED:-$(grep -o 'UNIFI_MONGODB_SERVICE_ENABLED=[a-z]*' /lib/systemd/system/unifi.service | head -1 | cut -d= -f2)}" )
-        if [ "$svc_enabled" = "false" ] && [ -e /etc/systemd/system/multi-user.target.wants/mongodb.service ]; then
-            systemctl disable mongodb.service >/dev/null 2>&1 && \
-                mkdir -p "$TUNING_STATE" && touch "$TUNING_STATE/mongodb-disabled" && \
-                echo "  Unused mongodb.service disabled (UniFi Network uses its own mongod)"
+        if [ "$svc_enabled" = "false" ] && [ ! -e /etc/systemd/system/mongodb.service ] && \
+           [ -e /lib/systemd/system/mongodb.service ]; then
+            ln -s /dev/null /etc/systemd/system/mongodb.service && \
+                mkdir -p "$TUNING_STATE" && touch "$TUNING_STATE/mongodb-masked" && \
+                echo "  Unused mongodb.service masked (UniFi Network uses its own mongod)"
         fi
     fi
 
