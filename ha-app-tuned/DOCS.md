@@ -16,7 +16,7 @@ configuration back.
 | Resource tuning | on | Master switch for everything below |
 | UniFi Network max heap (MB) | 1024 | Stock lets the Java heap grow to **70% of host RAM**, because Home Assistant doesn't set memory limits on apps. This caps it. |
 | Return idle Java memory | on | Every 5 min, G1 periodic GC + native heap trim return memory freed after spikes to the host, and the heap shrinks until about 30% of it is free (stock only shrinks above 70% free). Initial heap 128 MB. |
-| Disable unused MongoDB | on | Masks the stand-alone `mongodb.service` (port 27017), which has no clients. UniFi Network runs its own MongoDB on 27117. Only applied while the stock config has `UNIFI_MONGODB_SERVICE_ENABLED=false`. |
+| Disable unused MongoDB | on | Turns the stand-alone `mongodb.service` (port 27017), which has no clients, into a no-op. UniFi Network still runs `systemctl start mongodb` and needs it to succeed, so the unit is overridden rather than masked. UniFi Network runs its own MongoDB on 27117. Only applied while the stock config has `UNIFI_MONGODB_SERVICE_ENABLED=false`. |
 | Journal size limit (MB) | 32 | The systemd journal lives in RAM (`/run`) and otherwise grows to about 10% of `/run` |
 | Mask housekeeping timers | on | `apt-daily`, `apt-daily-upgrade`, `e2scrub_all` |
 | malloc arenas | 2 | `MALLOC_ARENA_MAX` for all services, which limits glibc memory fragmentation |

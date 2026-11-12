@@ -22,7 +22,7 @@ configuration:
   UOS_DISABLE_UNUSED_MONGODB:
     name: Disable unused MongoDB
     description: >-
-      Mask the stand-alone mongodb.service. UniFi Network runs its own MongoDB
+      Turn the stand-alone mongodb.service into a no-op. UniFi Network runs its own MongoDB
       and nothing connects to the stand-alone one.
   UOS_JOURNAL_MAX_MB:
     name: Journal size limit (MB)

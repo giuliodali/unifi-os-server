@@ -13,7 +13,7 @@
 #                                 back to the OS when idle (G1 periodic GC + native
 #                                 trim every 5 min, and shrink the heap to ~30% free)
 #   UOS_JVM_EXTRA_OPTS            extra JVM flags appended to UniFi Network
-#   UOS_DISABLE_UNUSED_MONGODB    mask the stand-alone mongodb.service
+#   UOS_DISABLE_UNUSED_MONGODB    turn the stand-alone mongodb.service into a no-op
 #                                 (UniFi Network runs its own mongod on 27117)
 #   UOS_RABBITMQ_SCHEDULERS       Erlang scheduler threads for RabbitMQ (0 = stock,
 #                                 one per CPU)
@@ -41,7 +41,8 @@ _remove_uos_tuning() {
     for t in apt-daily.timer apt-daily-upgrade.timer e2scrub_all.timer; do
         [ "$(readlink /etc/systemd/system/$t 2>/dev/null)" = /dev/null ] && rm -f /etc/systemd/system/$t
     done
-    # Undo our mongodb.service changes only if we made them
+    # The mongodb.service no-op drop-in is removed above. v1.8.0-tuned.4 masked
+    # the unit instead: undo that only if we made it
     if [ -f "$TUNING_STATE/mongodb-masked" ]; then
         [ "$(readlink /etc/systemd/system/mongodb.service 2>/dev/null)" = /dev/null ] && \
             rm -f /etc/systemd/system/mongodb.service
@@ -149,17 +150,21 @@ EnvironmentFile=-$TUNING_DIR/unifi.env"
     # UniFi Network starts its own mongod (port 27117, data in /var/lib/unifi/db)
     # when UNIFI_MONGODB_SERVICE_ENABLED=false, leaving mongodb.service (27017)
     # running with no clients. Disabling it isn't enough: UniFi Network runs
-    # "sudo systemctl start mongodb" at startup anyway, so mask it. Only while
-    # the stock config still uses the embedded mongod.
+    # "sudo systemctl start mongodb" at startup anyway. Masking breaks UniFi
+    # Network, which refuses to start unless one of its "systemctl start"
+    # attempts succeeds, so turn the unit into a no-op instead. Only while the
+    # stock config still uses the embedded mongod.
     if _is_true "${UOS_DISABLE_UNUSED_MONGODB:-true}"; then
         local svc_enabled
         svc_enabled=$( set +u; . /etc/default/unifi >/dev/null 2>&1
                        echo "${UNIFI_MONGODB_SERVICE_ENABLED:-$(grep -o 'UNIFI_MONGODB_SERVICE_ENABLED=[a-z]*' /lib/systemd/system/unifi.service | head -1 | cut -d= -f2)}" )
-        if [ "$svc_enabled" = "false" ] && [ ! -e /etc/systemd/system/mongodb.service ] && \
-           [ -e /lib/systemd/system/mongodb.service ]; then
-            ln -s /dev/null /etc/systemd/system/mongodb.service && \
-                mkdir -p "$TUNING_STATE" && touch "$TUNING_STATE/mongodb-masked" && \
-                echo "  Unused mongodb.service masked (UniFi Network uses its own mongod)"
+        if [ "$svc_enabled" = "false" ] && [ -e /lib/systemd/system/mongodb.service ]; then
+            _dropin mongodb.service "[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=
+ExecStart=/bin/true"
+            echo "  Unused mongodb.service replaced with a no-op (UniFi Network uses its own mongod)"
         fi
     fi
 
