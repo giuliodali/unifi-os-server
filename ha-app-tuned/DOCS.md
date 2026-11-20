@@ -20,7 +20,7 @@ configuration back.
 | Journal size limit (MB) | 32 | The systemd journal lives in RAM (`/run`) and otherwise grows to about 10% of `/run` |
 | Mask housekeeping timers | on | `apt-daily`, `apt-daily-upgrade`, `e2scrub_all` |
 | malloc arenas | 2 | `MALLOC_ARENA_MAX` for all services, which limits glibc memory fragmentation |
-| RabbitMQ scheduler threads | 0 (stock) | Available, but no measurable saving in tests |
+| RabbitMQ scheduler threads | 1 | Stock starts one scheduler per CPU. One is plenty for a home controller (about 35 MiB saved on a 4-core host; no saving on a 2-core CI runner). 0 restores stock. |
 | Extra JVM options | empty | Advanced |
 | Resource report interval (min) | 30 | Logs one `[resources]` line per interval with memory/CPU per service. Works with tuning on **or off**. |
 

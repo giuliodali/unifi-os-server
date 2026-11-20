@@ -1,5 +1,5 @@
 name: UniFi OS Server (tuned test)
-version: "v1.8.0-tuned.5"
+version: "v1.8.0-tuned.6"
 slug: unifi_os_server_tuned
 description: UniFi OS Server with CPU/RAM tuning (test build, built locally)
 url: https://github.com/giuliodali/unifi-os-server
@@ -58,7 +58,7 @@ options:
   UOS_JOURNAL_MAX_MB: 32
   UOS_MASK_HOUSEKEEPING_TIMERS: true
   UOS_MALLOC_ARENA_MAX: 2
-  UOS_RABBITMQ_SCHEDULERS: 0
+  UOS_RABBITMQ_SCHEDULERS: 1
   UOS_JVM_EXTRA_OPTS: ""
   UOS_RESOURCE_REPORT_MIN: 30
 schema:
