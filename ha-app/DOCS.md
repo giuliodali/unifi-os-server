@@ -10,6 +10,8 @@ Runs [UniFi OS Server](https://blog.ui.com/article/introducing-unifi-os-server) 
 
 Optional CPU/RAM tuning, applied only through systemd drop-ins, environment files and service config (no UniFi code changes). Every file is regenerated on each start, so switching **Resource tuning** off and restarting restores the stock configuration. The same settings work as `UOS_*` environment variables for Docker/Kubernetes users.
 
+In the app's **Configuration** tab these options are grouped under **Performance tuning**.
+
 | Option | Default | Effect |
 |---|---|---|
 | Resource tuning | on | Master switch for everything below |
@@ -21,14 +23,13 @@ Optional CPU/RAM tuning, applied only through systemd drop-ins, environment file
 | malloc arenas | 2 | `MALLOC_ARENA_MAX` for all services, which limits glibc memory fragmentation |
 | RabbitMQ scheduler threads | 1 | Stock starts one scheduler per CPU. One is plenty for a home controller (about 35 MiB saved on a 4-core host; no saving on a 2-core CI runner). 0 restores stock. |
 | Extra JVM options | empty | Advanced |
-| Resource report interval (min) | 0 (off) | Logs one `[resources]` line per interval with memory/CPU per service. Works with tuning on **or off**. |
 
 ## Comparing on your own install
 
 1. Under **Settings → Devices & services → Home Assistant Supervisor**, open this app's
    device and enable its **CPU percent** and **Memory percent** sensors.
 2. Run for a day with **Resource tuning** off, then a day with it on (same version).
-3. Compare the history graphs, and the `[resources]` lines in the app log.
+3. Compare the history graphs.
 
 ## Storage
 

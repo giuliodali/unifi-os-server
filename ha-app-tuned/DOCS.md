@@ -11,6 +11,8 @@ configuration back.
 
 ## What the tuning does
 
+In the app's **Configuration** tab these options are grouped under **Performance tuning**.
+
 | Option | Default | Effect |
 |---|---|---|
 | Resource tuning | on | Master switch for everything below |
@@ -22,14 +24,13 @@ configuration back.
 | malloc arenas | 2 | `MALLOC_ARENA_MAX` for all services, which limits glibc memory fragmentation |
 | RabbitMQ scheduler threads | 1 | Stock starts one scheduler per CPU. One is plenty for a home controller (about 35 MiB saved on a 4-core host; no saving on a 2-core CI runner). 0 restores stock. |
 | Extra JVM options | empty | Advanced |
-| Resource report interval (min) | 30 | Logs one `[resources]` line per interval with memory/CPU per service. Works with tuning on **or off**. |
 
 ## Comparing on your own install
 
 1. Under **Settings → Devices & services → Home Assistant Supervisor**, open this app's
    device and enable its **CPU percent** and **Memory percent** sensors.
 2. Run for a day with **Resource tuning** off, then a day with it on (same version).
-3. Compare the history graphs, and the `[resources]` lines in the app log.
+3. Compare the history graphs.
 
 ## Moving your existing data to this test app
 
