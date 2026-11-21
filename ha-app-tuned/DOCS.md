@@ -1,0 +1,49 @@
+# UniFi OS Server (tuned test)
+
+Test build of the UniFi OS Server app with optional CPU/RAM tuning. Home Assistant
+builds this app **locally** from this folder: the first install pulls the UniFi
+OS Server base image (about 2 GB) and takes a few minutes.
+
+Tuning only uses systemd drop-ins, environment files and service config. No UniFi
+code or packaged files are modified. All tuning files are regenerated on every
+start, so switching **Resource tuning** off and restarting gives you the stock
+configuration back.
+
+## What the tuning does
+
+In the app's **Configuration** tab these options are grouped under **Reduce Resources**.
+
+| Option | Default | Effect |
+|---|---|---|
+| Resource tuning | on | Master switch for everything below |
+| UniFi Network max heap (MB) | 1024 | Stock lets the Java heap grow to **70% of host RAM**, because Home Assistant doesn't set memory limits on apps. This caps it. |
+| Return idle Java memory | on | Every 5 min, G1 periodic GC + native heap trim return memory freed after spikes to the host, and the heap shrinks until about 30% of it is free (stock only shrinks above 70% free). Initial heap 128 MB. |
+| Disable unused MongoDB | on | Turns the stand-alone `mongodb.service` (port 27017), which has no clients, into a no-op. UniFi Network still runs `systemctl start mongodb` and needs it to succeed, so the unit is overridden rather than masked. UniFi Network runs its own MongoDB on 27117. Only applied while the stock config has `UNIFI_MONGODB_SERVICE_ENABLED=false`. |
+| Journal size limit (MB) | 32 | The systemd journal lives in RAM (`/run`) and otherwise grows to about 10% of `/run` |
+| Mask housekeeping timers | on | `apt-daily`, `apt-daily-upgrade`, `e2scrub_all` |
+| malloc arenas | 2 | `MALLOC_ARENA_MAX` for all services, which limits glibc memory fragmentation |
+| RabbitMQ scheduler threads | 1 | Stock starts one scheduler per CPU. One is plenty for a home controller (about 35 MiB saved on a 4-core host; no saving on a 2-core CI runner). 0 restores stock. |
+| Extra JVM options | empty | Advanced |
+
+## Comparing on your own install
+
+1. Under **Settings → Devices & services → Home Assistant Supervisor**, open this app's
+   device and enable its **CPU percent** and **Memory percent** sensors.
+2. Run for a day with **Resource tuning** off, then a day with it on (same version).
+3. Compare the history graphs.
+
+## Moving your existing data to this test app
+
+This app has its own config folder (`addon_configs/<repo-hash>_unifi_os_server_tuned`),
+separate from the original app. To test with your real configuration:
+
+1. Take a backup of the original app, then stop it (both apps use the same ports, and the
+   databases must not be running while you copy).
+2. Install this app but **don't start it** yet. Start and stop it once if the folder doesn't appear.
+3. Copy the *contents* of the original app's `addon_configs/..._unifi_os_server` folder into
+   this app's folder, replacing what's there. Copy **as root from an SSH session, preserving
+   ownership** (for example `cp -a /addon_configs/<old>/. /addon_configs/<new>/`). Don't copy over
+   Samba: it loses Linux file owners and permissions, and MongoDB/PostgreSQL may then fail to start.
+4. Start this app. To go back, stop it and start the original again. Its data is untouched.
+
+Alternatively, take a backup in UniFi OS (**Settings → Backups**) and restore it in this app.
