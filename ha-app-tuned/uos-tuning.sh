@@ -6,7 +6,7 @@
 # modified, and every file is regenerated on each start, so turning an option
 # off (or UOS_TUNING=false) restores the stock behaviour on the next restart.
 #
-#   UOS_TUNING                    master switch (default: true)
+#   UOS_TUNING                    master switch (default: false, opt in)
 #   UOS_JVM_MAX_HEAP_MB           UniFi Network max Java heap. 0 = stock
 #                                 (-XX:MaxRAMPercentage=70, i.e. 70% of host RAM)
 #   UOS_JVM_RETURN_MEMORY         let the JVM hand unused heap and malloc memory
@@ -60,7 +60,7 @@ apply_uos_tuning() {
     # Start clean so removed/changed options never leave stale config behind
     _remove_uos_tuning
 
-    if ! _is_true "${UOS_TUNING:-true}"; then
+    if ! _is_true "${UOS_TUNING:-false}"; then
         echo "Resource tuning disabled (UOS_TUNING=${UOS_TUNING})"
         return 0
     fi

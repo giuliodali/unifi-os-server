@@ -53,7 +53,7 @@ ports_description:
 options:
   UOS_SYSTEM_IP: ""
   reduce_resources:
-    UOS_TUNING: true
+    UOS_TUNING: false
     UOS_JVM_MAX_HEAP_MB: 1024
     UOS_JVM_RETURN_MEMORY: true
     UOS_DISABLE_UNUSED_MONGODB: true

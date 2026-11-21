@@ -7,14 +7,14 @@ configuration:
   reduce_resources:
     name: Reduce Resources
     description: >-
-      CPU and RAM tuning. Applied with systemd drop-ins and config only; turn
-      Resource tuning off and restart to run the stock configuration.
+      Optional CPU and RAM tuning, applied with systemd drop-ins and config only.
+      Off by default: turn Resource tuning on and restart to apply it.
     fields:
       UOS_TUNING:
         name: Resource tuning
         description: >-
-          Master switch for all CPU/RAM tuning below. Turn off to run the stock
-          configuration (takes effect on restart).
+          Master switch for all CPU/RAM tuning below. Off by default (stock behaviour);
+          takes effect on restart.
       UOS_JVM_MAX_HEAP_MB:
         name: UniFi Network max heap (MB)
         description: >-

@@ -8,13 +8,13 @@ Runs [UniFi OS Server](https://blog.ui.com/article/introducing-unifi-os-server) 
 
 ## Resource tuning
 
-Optional CPU/RAM tuning, applied only through systemd drop-ins, environment files and service config (no UniFi code changes). Every file is regenerated on each start, so switching **Resource tuning** off and restarting restores the stock configuration. The same settings work as `UOS_*` environment variables for Docker/Kubernetes users.
+Optional CPU/RAM tuning (**off by default**, enable it with the **Resource tuning** switch), applied only through systemd drop-ins, environment files and service config (no UniFi code changes). Every file is regenerated on each start, so switching **Resource tuning** off and restarting restores the stock configuration. The same settings work as `UOS_*` environment variables for Docker/Kubernetes users.
 
 In the app's **Configuration** tab these options are grouped under **Reduce Resources**.
 
 | Option | Default | Effect |
 |---|---|---|
-| Resource tuning | on | Master switch for everything below |
+| Resource tuning | **off** | Master switch for everything below. Turn it on to apply the settings in this table |
 | UniFi Network max heap (MB) | 1024 | Stock lets the Java heap grow to **70% of host RAM**, because Home Assistant doesn't set memory limits on apps. This caps it. |
 | Return idle Java memory | on | Every 5 min, G1 periodic GC + native heap trim return memory freed after spikes to the host, and the heap shrinks until about 30% of it is free (stock only shrinks above 70% free). Initial heap 128 MB. |
 | Disable unused MongoDB | on | Turns the stand-alone `mongodb.service` (port 27017), which has no clients, into a no-op. UniFi Network still runs `systemctl start mongodb` and needs it to succeed, so the unit is overridden rather than masked. UniFi Network runs its own MongoDB on 27117. Only applied while the stock config has `UNIFI_MONGODB_SERVICE_ENABLED=false`. |
@@ -28,7 +28,7 @@ In the app's **Configuration** tab these options are grouped under **Reduce Reso
 
 1. Under **Settings → Devices & services → Home Assistant Supervisor**, open this app's
    device and enable its **CPU percent** and **Memory percent** sensors.
-2. Run for a day with **Resource tuning** off, then a day with it on (same version).
+2. Run for a day with **Resource tuning** off (the default), then a day with it on (same version).
 3. Compare the history graphs.
 
 ## Storage
