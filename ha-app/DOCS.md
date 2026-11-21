@@ -10,7 +10,7 @@ Runs [UniFi OS Server](https://blog.ui.com/article/introducing-unifi-os-server) 
 
 Optional CPU/RAM tuning, applied only through systemd drop-ins, environment files and service config (no UniFi code changes). Every file is regenerated on each start, so switching **Resource tuning** off and restarting restores the stock configuration. The same settings work as `UOS_*` environment variables for Docker/Kubernetes users.
 
-In the app's **Configuration** tab these options are grouped under **Performance tuning**.
+In the app's **Configuration** tab these options are grouped under **Reduce Resources**.
 
 | Option | Default | Effect |
 |---|---|---|

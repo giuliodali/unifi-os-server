@@ -1,5 +1,5 @@
 name: UniFi OS Server (tuned test)
-version: "v1.8.0-tuned.7"
+version: "v1.8.0-tuned.8"
 slug: unifi_os_server_tuned
 description: UniFi OS Server with CPU/RAM tuning (test build, built locally)
 url: https://github.com/giuliodali/unifi-os-server
@@ -51,7 +51,7 @@ ports_description:
   8882/tcp: Hotspot portal redirection (HTTP)
 options:
   UOS_SYSTEM_IP: ""
-  performance:
+  reduce_resources:
     UOS_TUNING: true
     UOS_JVM_MAX_HEAP_MB: 1024
     UOS_JVM_RETURN_MEMORY: true
@@ -63,7 +63,7 @@ options:
     UOS_JVM_EXTRA_OPTS: ""
 schema:
   UOS_SYSTEM_IP: str?
-  performance:
+  reduce_resources:
     UOS_TUNING: bool
     UOS_JVM_MAX_HEAP_MB: int(0,16384)
     UOS_JVM_RETURN_MEMORY: bool

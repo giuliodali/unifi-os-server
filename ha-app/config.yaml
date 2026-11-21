@@ -52,7 +52,7 @@ ports_description:
   8882/tcp: Hotspot portal redirection (HTTP)
 options:
   UOS_SYSTEM_IP: ""
-  performance:
+  reduce_resources:
     UOS_TUNING: true
     UOS_JVM_MAX_HEAP_MB: 1024
     UOS_JVM_RETURN_MEMORY: true
@@ -64,7 +64,7 @@ options:
     UOS_JVM_EXTRA_OPTS: ""
 schema:
   UOS_SYSTEM_IP: str?
-  performance:
+  reduce_resources:
     UOS_TUNING: bool
     UOS_JVM_MAX_HEAP_MB: int(0,16384)
     UOS_JVM_RETURN_MEMORY: bool

@@ -4,8 +4,8 @@ configuration:
     description: >-
       Hostname (recommended) or IP address devices use for inform.
       If left empty, the IP address of Home Assistant's primary network interface is used.
-  performance:
-    name: Performance tuning
+  reduce_resources:
+    name: Reduce Resources
     description: >-
       CPU and RAM tuning. Applied with systemd drop-ins and config only; turn
       Resource tuning off and restart to run the stock configuration.

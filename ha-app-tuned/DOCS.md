@@ -11,7 +11,7 @@ configuration back.
 
 ## What the tuning does
 
-In the app's **Configuration** tab these options are grouped under **Performance tuning**.
+In the app's **Configuration** tab these options are grouped under **Reduce Resources**.
 
 | Option | Default | Effect |
 |---|---|---|
